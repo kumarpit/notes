@@ -1,5 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{p}{(}\PYG{k}{define}\PYG{+w}{ }\PYG{n}{EXPR}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{with}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{y}\PYG{+w}{ }\PYG{l+m+mi}{9}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{))}
-\PYG{p}{(}\PYG{k}{define}\PYG{+w}{ }\PYG{n}{WAE1}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{with}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{with}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{y}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{add}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{))))}
-\PYG{p}{(}\PYG{n}{subst}\PYG{+w}{ }\PYG{n}{EXPR}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{n}{WAE1}\PYG{p}{)}
-\end{Verbatim}

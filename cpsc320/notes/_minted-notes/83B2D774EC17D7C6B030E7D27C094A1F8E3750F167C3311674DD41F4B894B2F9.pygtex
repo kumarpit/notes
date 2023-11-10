@@ -1,7 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
-\PYG{esc}{$L_0$}\PYG{+w}{ }\PYG{esc}{$\leftarrow$}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n+nx}{s}\PYG{p}{\PYGZcb{}}
-\PYG{n+nx}{d}\PYG{+w}{ }\PYG{esc}{$\leftarrow$}\PYG{+w}{ }\PYG{l+m+mf}{1}
-\PYG{k}{while}\PYG{+w}{ }\PYG{n+nx}{L}\PYG{esc}{$<$}\PYG{n+nx}{d}\PYG{+w}{ }\PYG{l+m+mf}{6}\PYG{+w}{ }\PYG{esc}{$=$}\PYG{+w}{ }\PYG{n+nx}{V}\PYG{+w}{ }\PYG{k}{do}\PYG{+w}{    }\PYG{c+c1}{// L$<$d is defined as $\cup_{0 \leq i <d}L_i$}
-\PYG{+w}{    }\PYG{esc}{$L_d$}\PYG{+w}{ }\PYG{esc}{$\leftarrow$}\PYG{+w}{ }\PYG{esc}{$N(L_d$}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{esc}{$L_{<d}$}
-\PYG{+w}{    }\PYG{n+nx}{d}\PYG{+w}{ }\PYG{esc}{$\leftarrow$}\PYG{+w}{ }\PYG{n+nx}{d}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mf}{1}
-\end{Verbatim}
