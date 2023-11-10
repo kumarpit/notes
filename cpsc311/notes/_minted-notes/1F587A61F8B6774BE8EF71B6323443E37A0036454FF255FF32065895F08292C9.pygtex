@@ -1,0 +1,23 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{;; subst: WAE symbol WAE \PYGZhy{}\PYGZgt{} WAE}
+\PYG{c+c1}{;; substitutes second argument with third argument in the}
+\PYG{c+c1}{;; first argument. as per rules of substituition, the resulting}
+\PYG{c+c1}{;; expression contains no free instances of the second argument}
+
+\PYG{p}{(}\PYG{k}{define}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{subst}\PYG{+w}{ }\PYG{n}{expr}\PYG{+w}{ }\PYG{n}{sub\PYGZhy{}id}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{)}
+\PYG{+w}{    }\PYG{p}{(}\PYG{n}{type\PYGZhy{}case}\PYG{+w}{ }\PYG{n}{WAE}\PYG{+w}{ }\PYG{n}{expr}
+\PYG{+w}{        }\PYG{p}{[}\PYG{n}{num}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{expr}\PYG{p}{]}
+\PYG{+w}{        }\PYG{p}{[}\PYG{n}{add}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{l}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{add}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{subst}\PYG{+w}{ }\PYG{n}{l}\PYG{+w}{ }\PYG{n}{sub\PYGZhy{}id}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{)}
+\PYG{+w}{                        }\PYG{p}{(}\PYG{n}{subst}\PYG{+w}{ }\PYG{n}{r}\PYG{+w}{ }\PYG{n}{sub\PYGZhy{}id}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{))]}
+\PYG{+w}{        }\PYG{p}{[}\PYG{n}{sub}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{l}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{sub}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{subst}\PYG{+w}{ }\PYG{n}{l}\PYG{+w}{ }\PYG{n}{sub\PYGZhy{}id}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{)}
+\PYG{+w}{                        }\PYG{p}{(}\PYG{n}{subst}\PYG{+w}{ }\PYG{n}{l}\PYG{+w}{ }\PYG{n}{sub\PYGZhy{}id}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{))]}
+\PYG{+w}{        }\PYG{p}{[}\PYG{n}{with}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{bound\PYGZhy{}id}\PYG{+w}{ }\PYG{n}{named\PYGZhy{}expr}\PYG{+w}{ }\PYG{n}{bound\PYGZhy{}body}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{(}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{symbol=?}\PYG{+w}{ }\PYG{n}{bound\PYGZhy{}id}\PYG{+w}{ }\PYG{n}{sub\PYGZhy{}id}\PYG{p}{))}\PYG{+w}{ }\PYG{c+c1}{;; means a nested `with` with same id}
+\PYG{+w}{                }\PYG{p}{(}\PYG{n}{with}\PYG{+w}{ }\PYG{n}{bound\PYGZhy{}id}
+\PYG{+w}{                      }\PYG{p}{(}\PYG{n}{subst}\PYG{+w}{ }\PYG{n}{named\PYGZhy{}expr}\PYG{+w}{ }\PYG{n}{sub\PYGZhy{}id}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{)}
+\PYG{+w}{                      }\PYG{n}{bound\PYGZhy{}body}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{(}\PYG{n}{with}\PYG{+w}{ }\PYG{n}{bound\PYGZhy{}id}
+\PYG{+w}{                      }\PYG{p}{(}\PYG{n}{subst}\PYG{+w}{ }\PYG{n}{named\PYGZhy{}expr}\PYG{+w}{ }\PYG{n}{sub\PYGZhy{}id}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{)}
+\PYG{+w}{                      }\PYG{p}{(}\PYG{n}{subst}\PYG{+w}{ }\PYG{n}{bound\PYGZhy{}body}\PYG{+w}{ }\PYG{n}{sub\PYGZhy{}id}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{))]}
+\PYG{+w}{        }\PYG{p}{[}\PYG{n}{id}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{v}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{symbol=?}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{n}{sub\PYGZhy{}id}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{val}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{]))}
+\end{Verbatim}

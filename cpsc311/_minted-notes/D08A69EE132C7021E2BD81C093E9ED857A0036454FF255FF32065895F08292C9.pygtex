@@ -1,0 +1,37 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{;; Tel \PYGZhy{}\PYGZgt{} Canonical}
+\PYG{c+c1}{;; produce the canonical form result of interpreting the given TEL}
+\PYG{c+c1}{;; (subst based interpreter)}
+\PYG{p}{(}\PYG{k}{define}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{interp/tel\PYGZhy{}cf}\PYG{+w}{ }\PYG{n}{tel}\PYG{p}{)}
+\PYG{+w}{    }\PYG{p}{(}\PYG{n}{type\PYGZhy{}case}\PYG{+w}{ }\PYG{n}{TEL}\PYG{+w}{ }\PYG{n}{tel}
+\PYG{+w}{    }\PYG{p}{[}\PYG{n}{num}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{value}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{num}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{))]}
+\PYG{+w}{    }\PYG{p}{[}\PYG{n}{add}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{l}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{(}\PYG{n}{type\PYGZhy{}case}\PYG{+w}{ }\PYG{n}{Canonical}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{interp/tel\PYGZhy{}cf}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{)}\PYG{+w}{  }\PYG{c+c1}{;; first evaluate left operand}
+\PYG{+w}{            }\PYG{p}{[}\PYG{n}{value}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{vl}\PYG{p}{)}
+\PYG{+w}{                    }\PYG{p}{(}\PYG{n}{type\PYGZhy{}case}\PYG{+w}{ }\PYG{n}{Canonical}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{interp/tel\PYGZhy{}cf}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)}
+\PYG{+w}{                    }\PYG{p}{[}\PYG{n}{value}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{vr}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{add\PYGZhy{}value}\PYG{+w}{ }\PYG{n}{vl}\PYG{+w}{ }\PYG{n}{vr}\PYG{p}{)]}
+\PYG{+w}{                    }\PYG{p}{[}\PYG{n}{razed}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{tag}\PYG{+w}{ }\PYG{n}{payload}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{razed}\PYG{+w}{ }\PYG{k}{tag}\PYG{+w}{ }\PYG{n}{payload}\PYG{p}{)])]}
+\PYG{+w}{            }\PYG{p}{[}\PYG{n}{razed}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{tag}\PYG{+w}{ }\PYG{n}{payload}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{razed}\PYG{+w}{ }\PYG{k}{tag}\PYG{+w}{ }\PYG{n}{payload}\PYG{p}{)])]}
+\PYG{+w}{    }\PYG{p}{[}\PYG{n}{id}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{error}\PYG{+w}{ }\PYG{o}{\PYGZsq{}}\PYG{l+s+ss}{interp}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Unbound identifier: \PYGZti{}a\PYGZdq{}}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)]}
+\PYG{+w}{    }\PYG{p}{[}\PYG{n}{fun}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{n}{body}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{value}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{fun}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{n}{body}\PYG{p}{))]}
+\PYG{+w}{    }\PYG{p}{[}\PYG{n}{app}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{rator}\PYG{+w}{ }\PYG{n}{rand}\PYG{p}{)}
+\PYG{+w}{            }\PYG{c+c1}{;; needs fixing}
+\PYG{+w}{            }\PYG{p}{(}\PYG{k}{let}\PYG{+w}{ }\PYG{p}{(}\PYG{p}{[}\PYG{n}{vrator}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{interp/tel\PYGZhy{}cf}\PYG{+w}{ }\PYG{n}{rator}\PYG{p}{)]}
+\PYG{+w}{                }\PYG{p}{[}\PYG{n}{vrand}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{interp/tel\PYGZhy{}cf}\PYG{+w}{ }\PYG{n}{rand}\PYG{p}{)])}
+\PYG{+w}{            }\PYG{p}{(}\PYG{n}{apply\PYGZhy{}value}\PYG{+w}{ }\PYG{n}{vrator}\PYG{+w}{ }\PYG{n}{vrand}\PYG{p}{))]}
+\PYG{+w}{    }\PYG{p}{[}\PYG{n}{if0}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{p}\PYG{+w}{ }\PYG{n}{c}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{)}
+\PYG{+w}{            }\PYG{c+c1}{;; needs fixing}
+\PYG{+w}{            }\PYG{p}{(}\PYG{k}{let}\PYG{+w}{ }\PYG{p}{(}\PYG{p}{[}\PYG{n}{vp}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{interp/tel\PYGZhy{}cf}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{)])}
+\PYG{+w}{            }\PYG{p}{(}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{zero?\PYGZhy{}value}\PYG{+w}{ }\PYG{n}{vp}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{(}\PYG{n}{interp/tel\PYGZhy{}cf}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{(}\PYG{n}{interp/tel\PYGZhy{}cf}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{)))]}
+\PYG{+w}{    }\PYG{p}{[}\PYG{n}{fix}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{n}{body}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{interp\PYGZhy{}fix}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{n}{body}\PYG{p}{)]}
+\PYG{+w}{    }\PYG{p}{[}\PYG{n}{match/handle}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{expr}\PYG{+w}{ }\PYG{n}{vid}\PYG{+w}{ }\PYG{n}{vbody}\PYG{+w}{ }\PYG{n}{etag}\PYG{+w}{ }\PYG{n}{eid}\PYG{+w}{ }\PYG{n}{ebody}\PYG{p}{)}
+\PYG{+w}{                    }\PYG{p}{(}\PYG{k}{let}\PYG{+w}{ }\PYG{p}{(}\PYG{p}{[}\PYG{n}{cexpr}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{interp/tel\PYGZhy{}cf}\PYG{+w}{ }\PYG{n}{expr}\PYG{p}{)])}
+\PYG{+w}{                    }\PYG{p}{(}\PYG{n}{interp\PYGZhy{}match/handle}\PYG{+w}{ }\PYG{n}{cexpr}
+\PYG{+w}{                                            }\PYG{n}{vid}\PYG{+w}{ }\PYG{n}{vbody}
+\PYG{+w}{                                            }\PYG{n}{etag}\PYG{+w}{ }\PYG{n}{eid}\PYG{+w}{ }\PYG{n}{ebody}\PYG{p}{))]}
+\PYG{+w}{    }\PYG{p}{[}\PYG{n}{raze}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{tag}\PYG{+w}{ }\PYG{n}{expr}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{(}\PYG{k}{let}\PYG{+w}{ }\PYG{p}{(}\PYG{p}{[}\PYG{n}{cexpr}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{interp/tel\PYGZhy{}cf}\PYG{+w}{ }\PYG{n}{expr}\PYG{p}{)])}
+\PYG{+w}{            }\PYG{p}{(}\PYG{n}{interp\PYGZhy{}raze}\PYG{+w}{ }\PYG{k}{tag}\PYG{+w}{ }\PYG{n}{cexpr}\PYG{p}{))]))}
+\end{Verbatim}

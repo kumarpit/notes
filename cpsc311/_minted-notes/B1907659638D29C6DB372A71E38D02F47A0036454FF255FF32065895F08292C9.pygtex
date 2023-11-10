@@ -1,0 +1,24 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{;; Run \PYGZhy{}\PYGZgt{} Natural}
+\PYG{c+c1}{;; Calculate the score induced by this run}
+\PYG{p}{(}\PYG{k}{define}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{run\PYGZhy{}score!}\PYG{+w}{ }\PYG{n}{run0}\PYG{p}{)}
+\PYG{+w}{    }\PYG{c+c1}{;; Accumulator: factor is Natural}
+\PYG{+w}{    }\PYG{c+c1}{;; Invariant: factor is (expt 2 N) where N is the number of 5\PYGZsq{}s in run0}
+\PYG{+w}{    }\PYG{c+c1}{;;            before run.}
+\PYG{+w}{    }\PYG{p}{(}\PYG{k}{local}\PYG{+w}{ }\PYG{p}{[}\PYG{p}{(}\PYG{k}{define}\PYG{+w}{ }\PYG{n}{factor}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{void}\PYG{p}{))}
+\PYG{+w}{            }\PYG{c+c1}{;; Run \PYGZhy{}\PYGZgt{} Natural}
+\PYG{+w}{            }\PYG{c+c1}{;; Effect: mutates factor}
+\PYG{+w}{            }\PYG{p}{(}\PYG{k}{define}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{run\PYGZhy{}score\PYGZhy{}\PYGZhy{}acc}\PYG{+w}{ }\PYG{n}{run}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{(}\PYG{k}{cond}\PYG{+w}{ }\PYG{p}{[}\PYG{p}{(}\PYG{n+nb}{empty?}\PYG{+w}{ }\PYG{n}{run}\PYG{p}{)}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{]}
+\PYG{+w}{                    }\PYG{p}{[}\PYG{k}{else}
+\PYG{+w}{                    }\PYG{p}{(}\PYG{k}{let}\PYG{+w}{ }\PYG{p}{(}\PYG{p}{[}\PYG{n}{value}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{first}\PYG{+w}{ }\PYG{n}{run}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{factor}\PYG{p}{)])}
+\PYG{+w}{                        }\PYG{p}{(}\PYG{k}{begin}
+\PYG{+w}{                        }\PYG{p}{(}\PYG{k}{set!}\PYG{+w}{ }\PYG{n}{factor}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{first}\PYG{+w}{ }\PYG{n}{run}\PYG{p}{)}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{)}
+\PYG{+w}{                                        }\PYG{p}{(}\PYG{n+nb}{*}\PYG{+w}{ }\PYG{n}{factor}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{+w}{                                        }\PYG{n}{factor}\PYG{p}{))}
+\PYG{+w}{                        }\PYG{p}{(}\PYG{n+nb}{+}\PYG{+w}{ }\PYG{n}{value}
+\PYG{+w}{                            }\PYG{p}{(}\PYG{n}{run\PYGZhy{}score\PYGZhy{}\PYGZhy{}acc}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{rest}\PYG{+w}{ }\PYG{n}{run}\PYG{p}{)))))]))]}
+\PYG{+w}{    }\PYG{c+c1}{;; 1 = (expt 2 0)}
+\PYG{+w}{    }\PYG{p}{(}\PYG{k}{begin}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{set!}\PYG{+w}{ }\PYG{n}{factor}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{(}\PYG{n}{run\PYGZhy{}score\PYGZhy{}\PYGZhy{}acc}\PYG{+w}{ }\PYG{n}{run0}\PYG{p}{))))}
+\end{Verbatim}

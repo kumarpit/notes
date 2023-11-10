@@ -1,0 +1,670 @@
+\documentclass{tufte-handout}
+
+%\geometry{showframe}% for debugging purposes -- displays the margins
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+
+% Set up the images/graphics package
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{graphics/}}
+
+\title{Math 342: Algebra and Coding Theory\thanks{Taught by Prof. Kalle Karu}}
+\author[The Tufte-LaTeX Developers]{}
+\date{Fall 2023/24}  % if the \date{} command is left out, the current date will be used
+
+% The following package makes prettier tables.  We're all about the bling!
+\usepackage{booktabs}
+
+% The units package provides nice, non-stacked fractions and better spacing
+% for units.
+\usepackage{units}
+
+% The fancyvrb package lets us customize the formatting of verbatim
+% environments.  We use a slightly smaller font.
+\usepackage{fancyvrb}
+\fvset{fontsize=\normalsize}
+
+% Small sections of multiple columns
+\usepackage{multicol}
+
+% Provides paragraphs of dummy text
+\usepackage{lipsum}
+
+% These commands are used to pretty-print LaTeX commands
+\newcommand{\doccmd}[1]{\texttt{\textbackslash#1}}% command name -- adds backslash automatically
+\newcommand{\docopt}[1]{\ensuremath{\langle}\textrm{\textit{#1}}\ensuremath{\rangle}}% optional command argument
+\newcommand{\docarg}[1]{\textrm{\textit{#1}}}% (required) command argument
+\newenvironment{docspec}{\begin{quote}\noindent}{\end{quote}}% command specification environment
+\newcommand{\docenv}[1]{\textsf{#1}}% environment name
+\newcommand{\docpkg}[1]{\texttt{#1}}% package name
+\newcommand{\doccls}[1]{\texttt{#1}}% document class name
+\newcommand{\docclsopt}[1]{\texttt{#1}}% document class option name
+
+\newcommand{\mgraphics}[2]{
+\begin{marginfigure}%
+    \includegraphics[width=\linewidth]{#1}
+    \caption{#2}
+    \label{fig:marginfig}
+  \end{marginfigure}}
+\begin{document}
+
+\newcommand{\fwgraphics}[2]{
+\begin{figure}%
+    \includegraphics{#1}
+    \caption{#2}
+    \label{fig:marginfig}
+    \setfloatalignment{b}
+  \end{figure}}
+\begin{document}
+
+
+\newcommand{\DD}{\mathbb{D}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+
+\makeatletter
+\@addtoreset{theorem}{section}
+\makeatother
+
+\theoremstyle{definition}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{warning}{Warning}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{example}{Example}[section]
+
+\newcommand{\bold}[1]{\textbf{#1}}% bold face
+
+\begin{document}
+\maketitle% this prints the handout title, author, and date
+
+\begin{abstract}
+\noindent These are my class notes, further research and a possibly random collection of facts from this course.
+\end{abstract}
+
+%\printclassoptions
+
+\section{Introduction to error-correcting codes}
+\addtocounter{section}{1}
+
+Error correcting codes are used to correct errors when messages are transmitted through a noisy channel.
+Some terminology,
+\begin{itemize}
+    \item A \bold{code} is a set of codewords
+    \item A \bold{codeword} is a sequence of symbols chosen from a set $F_q = \{ \lambda_1, \lambda_2, \cdots, \lambda_q \}$
+    \item A \bold{q-ary} code is a given set of sequences of symbols chosen from $F_q$
+    \item The set $F_q$ is called the \bold{alphabet} and is often taken to be the set $Z_q = \{ 0,1,2, \cdots , q-1 \}$
+    \item A code in which each codeword is a sequence consisting of a fixed number $n$ of symbols is called a \bold{block code} of length $n$.
+    \item Let $(F_q)^n$ denote the set of all ordered n-tuples $a = a_1a_2a_3\cdots$ where each $a_i \in F_q$. The order of the set $(F_q)^n$ is $q^n$. A q-ary code of length n is just a subset of $(F_q)^n$.
+\end{itemize}
+
+To explore the idea of a codeword being "closer" to another, we introduce the \emph{\bold{hamming distance}}.
+$$d(a_1a_2a_3\cdots, b_1b_2b_3\cdots) = \text{\# of places the two codewords differ}$$ 
+
+The hamming distance is a legitimate distance function, or metric, since it satisfies the following three properties:
+\begin{itemize}
+    \item $d(x,y) = 0 \leftrightarrow x = y$
+    \item $d(x,y) = d(y,x)$ for all $x,y \in (F_q)^n$
+    \item $d(x,y) \leq d(x,z) + d(z,y)$ for all $x,y,z \in (F_q)^n$
+\end{itemize}
+
+Any set $S$ with a distance function is a \textbf{metric space}.
+
+An important parameter of a code $\mathcal{C}$, giving a measure of how good it is at error correcting, is the minimum distance, denoted $d(\mathcal{C})$, which is defined as the following
+$$ d(\mathcal{C}) = min \{d(w_i, w_j) \: | \: w_i, w_j \in \mathcal{C}, w_i \neq w_j \} $$
+
+\mgraphics{graphics/2023-09-24-22-41-28.png}{The main idea behind error correction}
+
+\begin{theorem}
+    If $d(\mathcal{C}) = d$ then
+    \begin{itemize}
+        \item $\mathcal{C}$ can detect upto $d-1$ errors (since it needs atleast $d$ errors to reach a new codeword)
+        \item $\mathcal{C}$ can correct $< \frac{d}{2}$ errors
+    \end{itemize}
+or, equivalently
+    \begin{itemize} 
+        \item A code $C$ can detect upto $s$ errors in any codeword if $d(C) \geq s+1$
+        \item A code $C$ can correct upto $t$ errors in any codeword if $d(C) \geq 2t + 1$ 
+    \end{itemize}
+\end{theorem}
+
+\subsection{Parameters of a code}
+A $q$-ary $(n,M,d)$-code has parameters
+\begin{itemize}
+    \item $q$ = size of the alphabet
+    \item $n =$ lenght of codewords
+    \item $M =$ number of codewords
+    \item $d =$ minimum distance between codewords
+\end{itemize}
+
+\section{The main coding theory problem}
+\addtocounter{section}{1}
+
+Now, we ask ourselves - what makes a good code? We would assume that a good code will have the following properties:
+\begin{itemize}
+    \item large $M \to$ gives many codewords enabling wide variety of messages
+    \item small $n \to$ give us a small length allowing fast transmission
+    \item large $d \to$ correct many errors
+\end{itemize}
+These conflicting aims are referred to as the \textit{main coding theroy problem}. The usual version of this problem is to find the largest $q$-ary code of a given length and given minimum distance. 
+
+We denote by $A_q(n,d)$ the largest value of $M$ such that there exists $q$-ary $(n,M,d)$-code. This problem is easily solved for $d=1$ and $d=n$ for all $q$.
+
+\begin{theorem}
+        (i) $A_q(n,1) = q^n$    (ii) $A_q(n,n) = q$
+\end{theorem}
+
+If we fix $q=2$, we get \textit{binary} codes. The table to the right specifies the value of $A_2(n,d)$ for values of $n,d$. \footnote{
+\caption{Various values of $A_2(n,d)$}
+\begin{center}
+    \begin{tabular}{c | c  c  c  c  c}
+        $n / d$ & 1 & 2 & 3 & 4 & 5 \\
+        \hline
+        1 & 2^1 & - & - & - & - \\
+        2 & 2^2 & 2^1 & - & - & - \\
+        3 & 2^3 & 2^2 & 2^1 & - & - \\
+        4 & 2^4 & 2^3 & 2^2 & 2^1 & - \\
+        5 & 2^5 & 2^4 & 2^3 & 2^2 & 2^1 
+    \end{tabular}
+\end{center}
+}
+
+\begin{theorem}
+    Suppose $d$ is odd. Then a binary $(n,M,d)$-code exists if and only if a binary $(n+1, M, d+1)$-code exists.
+\end{theorem}
+The proof for this theorem requires the following definitions and lemmas.
+\begin{definition}
+    The \textbf{weight} of a binary word $W$ is the number of 1s in $W$.
+\end{definition}
+
+\begin{lemma}
+    If $x,y \in (F_2)^n \implies d(x,y) = w(x + y) = w(x) + w(y) - 2w(x \cap y)$\footnote{
+        For $x,y \in (F_q)^n$ the operations $+$ and $\cap$ are defined as follows:
+        \begin{itemize}
+            \item $x+y = (x_1 + y_1, x_2 + y_2, \dots)$
+            \item $x\cap y = (x_1 \cdot y_1, x_2 \cdot y_2, \dots)$
+        \end{itemize}
+        where $x_i+y_i$ and $x_i\cdot y_i$ are performed modulo $q$
+    }
+\end{lemma}
+
+\begin{proof}
+    ($\implies$) Suppose $C$ is a $(n,M,d)$-code and $d$ is odd. Let $\hat{C}$ be the code of length $n+1$ obtained from $C$ by extending every codeword in $C$ according to the rule\footnote[][1.54cm]{This construction of $\hat{C}$ from $C$ is called \textit{adding an overall partiy check}.}
+        $$x = x_1x_2x_3\dotsx_n \to \hat{x} =
+        \begin{cases}
+            x_1x_2\dots x_n0 &\text{ if $w(x)$ is even} \\
+            x_1x_2\dots x_n1 &\text{ if $w(y)$ is odd}
+        \end{cases}
+        $$
+        Since $w(\hat{x})$ is even for $\hat{x} \in \hat{C}$, it follows from lemma above that $d(\hat{x}, \hat{y})$ is also even for any $\hat{x}, \hat{y} \in \hat{C}$. Since $\hat{C}$ is an extension of $C$, it must be that
+        $$d \leq d(\hat{C}) \leq d+1$$
+        Since $d$ is odd, it must be that $d(\hat{C}) = d+1$. \\ \\
+    ($\impliedby$) Suppose $D$ is any $(n+1,M,d+1)$-code where $d$ is odd. Choose codewords $x,y \in D$ such that $d(x,y) = d+1$ and find a position where $x,y$ both differ. Remove this position all codewords in $D$. We are left with a $(n,M,d)$-code.
+\end{proof}
+
+\subsection{Equivalence of codes}
+Let $S_1, S_2$ be two distinct metric spaces. Then we say that 
+$f : S_1 \to S_2$ is an \textbf{isometry} if it preserves distances.
+
+We say that two codes are \textbf{equivalent} if we can get from one to other through a sequence of \textit{elementary operations}. These elementary operations can be one of:
+\begin{enumerate}
+    \item Permute codewords (rows)
+    \item Permute columns
+    \item In one column, permute symbols (e.g $1 \to 0$ in column 2)
+\end{enumerate}
+
+Equivalent codes are isometric. That means there exists a bijection $f: C_1 \to C_2$ preserving distance.
+$$d(w_1,w_2) = d(f(w_1), f(w_2))$$
+
+\subsection{Sphere packing}
+We now introduce the notion of a sphere in the set $(F_q)^n$.
+\begin{definition}
+    For any vector $u$ in $(F_q)^n$ and any integer $r \geq 0$, the \textit{sphere} of radius $r$ and centre $u$, denoted by $S(u,r)$ is the set 
+    $$ \{v \in (F_q)^n \; \; | \; \; d(u,v) \leq r \}$$
+\end{definition}
+
+\fwgraphics{graphics/2023-10-07-16-17-17.png}{Visualizing codewords in $(F_q)^n$}
+
+Recall that a code $C$ can correct $t$ errors if $d(C) \geq 2t+1$. Visualized, this means that the spheres of radius $t$ centered at the codewords of $C$ are disjoint. Therefore, if $t$ or fewer errors occurs, then the received vector may be different from the centre of the sphere, but it cannot escape the sphere and will be drawn back by nearest neighbour decoding.
+
+\mgraphics{graphics/2023-10-07-17-24-20.png}{Visualization of $C$}
+
+Now recall the main coding theory problem of determining the largest value of $M$ such that there exists a $q$-ary $(n,M,d)$-code. Sometimes, it isn't possible to determine the exact value for $M$. In which case, we need to figure out bounds on $M$. Sphere packing gives one such bound. Let $N_{q,r}$ denote the number of points in a sphere of radius in $(F_q)^n$. If we fit $M$ non-overlapping spheres into $(F_q)^n$, we get 
+$$M \cdot N_{q,r} \leq q^n \text{ (total number of points in $(F_q)^n)$}$$
+And therefore, 
+$$M \leq \frac{q^n}{N_{q,r}}$$
+
+\begin{lemma}
+    A sphere of radius $r$ in $(F_q)^n$ and $0 \leq r \leq n$ contains exactly
+    $$ \binom{n}{0} + \binom{n}{1} \cdot (q-1) + \binom{n}{2} \cdot (q-1)^2 + \cdots + \binom{n}{r} \cdot (q-1)^r $$
+\end{lemma}
+vectors.
+
+\begin{proof}
+    Let $u$ be any fixed vector in $(F_q)^n$. Consider how many vectors $v$ have distance exactly $m$ from $u$, for some $m \leq n$. The $m$ positions in which $v$ is to differ from $u$ can be chosen in $\binom{n}{m}$ ways. In each of these $m$ positions, the entry of $v$ can be chosen in $q-1$ ways to differ from the corresponding entry in $u$. Hence, the number of vectors at distance exactly $m$ from $u$ is given by 
+    $\binom{n}{m} \cdot (q-1)^m$ and so the total number of vectors in $S(u,r)$ is given by 
+    $$ \binom{n}{m} + \binom{n}{1} \cdot (q-1) + \binom{n}{2} \cdot (q-1)^2 + \cdots + \binom{n}{r} \cdot (q-1)^r $$
+\end{proof}
+
+\begin{theorem}
+    A $q$-ary $(n,M,2t+1)$-code satisfies 
+    $$M \cdot \left[ \binom{n}{0} + \binom{n}{1} \cdot (q-1) + \binom{n}{2} \cdot (q-1)^2 + \cdots + \binom{n}{t} \cdot (q-1)^t \right] \leq q^n $$
+\end{theorem}
+
+\marginnote{
+    The radius for a sphere in a code is given by $r = (d(C) - 1) / 2$ (truncated)
+}
+
+\begin{definition}
+    A \textbf{\textit{perfect code}}  is one that achieves the sphere packing bound with equality.
+\end{definition}
+
+\fwgraphics{graphics/2023-10-07-17-51-28.png}{Examples of perfect codes}
+\section{An introduction to finite fields}
+\addtocounter{section}{1}
+
+To make error-correcting codes easier to analyse, we need to impose a algebraic structure\footnote{An algebraic structure consists of non-empty set A, a collection of operations on A and finite set of identites, known as axioms, that these operations must obey.} onto them. 
+
+\begin{definition}
+    A \textbf{\textit{field}} $F$ is a set of elements with two operations\footnote{well, you can say a field has 4 operations, but division and substraction are just multiplication and addition} $+$ (called addition) and $\cdot$ (called multiplication) satisfying the following properties:
+    \begin{enumerate}[(i)]
+        \item $F$ is closed under $+$ and $\cdot$
+        \item Commutative laws hold - i.e $a+b = b+a, a\cdot b = b \cdot a$
+        \item Associative laws hold - $(a+b) + c = a + (b+c), a \cdot (b \cdot c) = (a \cdot b) \cdot c$
+        \item Distributive law - $a \cdot (b + c) = a\cdot b + a \cdot c$ \\ 
+        \item Identity elements $0$ and $1$ must exist in $F$
+        \item $a + 0 = a$
+        \item $a \cdot 1 = a $
+        \item There must exists an additive inverse $(-a)$ in $F$ such that $a + (-a) = 0$
+        \item For any $a \neq 0$, there exists a multiplicative inverse $(a^{-1})$ such that $a \cdot a^{-1} = 1$          
+    \end{enumerate}
+\end{definition}
+
+\begin{lemma}
+    Any field $F$ has the following properties:
+    \begin{enumerate}[(i)]
+        \item $a \cdot 0 = 0$ for all $a \in F$
+        \item $ab = 0 \implies a = 0 \text{ or } b = 0$
+    \end{enumerate}
+\end{lemma}
+
+\begin{definition}
+    Any set of elements with $+$ and $\cdot$ satisfying the properties $(i)$ to $(viii)$ but not necessarily $(ix)$ is called a \textbf{\textit{ring}}.
+\end{definition}
+
+Examples of fields include $\RR, \mathbb{C}$. Examples of rings include $\ZZ$. Note that every field is a ring.\\
+\begin{definition}
+    A \textit{finite field} has a finite number of elements in it, this number being called the \textit{order} of the field.
+\end{definition}
+
+\begin{theorem}\footnote{Proved by Evariste Galois (1811-32)}
+    There exists a field of order $q$ if and only if $q$ is a prime power (i.e $q = p^h$ where $p$ is a prime number and $h$ is a positive integer).Furthermore, if $q$ is a prime power, then there is only one field of that order.
+\end{theorem}
+
+\begin{definition}
+    A field of order $q$ is often called a \textit{Galois field} and is denoted by $GF(q)$.
+\end{definition}
+
+In this course, we consider only \textit{prime fields}, those of order a prime number $p$. We shall see that if $p$ is prime, then $GF(p)$ is just the set $\{0,1,2,\dots, p-1 \}$ with arithmetic carried out modulo $p$.
+
+But first, a review of modular arithmetic.
+
+\subsection{Modular Arithmetic}
+Consider $a,b \neq 0 \in \ZZ$
+$$
+    \frac{a}{b} = \underbrace{q}_{\text{quotient}} + \frac{\overbrace{r}^{\text{remainder}}}{b}
+$$
+where $b > 0, r \in \{0,1,2,...,b-1\}$
+
+\begin{definition}
+    We say that $b$ divides $a$, $b \; | \; a$, if $$\frac{a}{b} = q \leftrightarrow a = bq$$
+    Equivalently, we say that $a$ divides $b$ if $b / a \in \ZZ$. 
+    We say that the \bold{divisions} of $a$ is the set of all $b > 0$ such that $b \; | \; a$
+\end{definition}
+
+\begin{definition}
+    A number $p$ is \bold{prime} if its divisions are $\{1,p\}$ only.
+\end{definition}
+
+\begin{theorem}
+    Consider $a, b \neq 0$, $gcd(a, b) = gcd(a,b - q \cdot a)$ for any $q \in \ZZ$
+\end{theorem}
+
+\begin{example}
+    \begin{align*}
+        gcd(24,90) &= gcd(24, 90 - 3 \cdot 24) \\
+        &= gcd(24,18) \\
+        &= gcd(24 - 18, 18) \\
+        &= gcd(6, 18) \\
+        &= gcd(6, 18 - 3 \cdot 6) \\
+        &= gcd(6, 0) \\
+    \end{align*}
+    This is the \bold{Euclidean} algorithm for finding $gcd(a,b)$
+\end{example}
+
+\begin{theorem}\footnote{This is known as Bézout's identity}
+    Let $d = gcd(m,n)$. Then we can write 
+    $$ d = a \cdot m + b \cdot n $$
+    for some $a,b \in \ZZ$
+\end{theorem}
+\begin{proof}
+    Use Euclidean algorithm
+\end{proof}
+
+\begin{definition}
+    $m,n \in \ZZ$ are relatively prime if $gcd(m,n) = 1$.
+\end{definition}
+
+\begin{definition}
+    We say that $a$ is congruent to $b$ modulo $m$ if $a = b + qm$ for some $q$. We denote this by $a \equiv b \text{ (mod $m$)}$.
+\end{definition}
+
+\begin{definition}\mgraphics{graphics/2023-10-26-11-22-53.png}{Addition and multiplication in $\ZZ_4$}
+    $\ZZ_m = \{ 0, 1, 2, \dots, m-1 \}$ with operations $+$ and $\cdot$ defined as
+    \begin{itemize}
+        \item $a+b = $ principal remainder of $\frac{a+b}{m}$
+        \item $a\cdot b = $ principal remainder of $\frac{ab}{m}$
+    \end{itemize}
+\end{definition}
+
+\begin{theorem}
+    If $a \equiv a' \;  (mod \; m)$ and $b \equiv b' \; (mod \; m)$ then we have that 
+    \begin{itemize}
+        \item $a+b \equiv a' + b' \; \; (mod \; m)$
+        \item $ab \equiv a' \cdot b' \; \; (mod \; m)$
+    \end{itemize}
+\end{theorem}
+
+\begin{definition}
+Inverse of $y$ ($1/y$) in mod n is some $x \in \ZZ_n$ such that
+$y \cdot x \equiv 1$ (mod n). 
+\end{definition}
+
+\begin{theorem}
+    $1 / b$ exists in $\ZZ_m \Longleftrightarrow gcd(b,m) = 1$
+\end{theorem}
+\begin{proof}
+    @TODO
+\end{proof}
+
+\begin{example}\footnote{https://math.stackexchange.com/ 
+    questions/586595/finding-modular-of-a-fraction}
+    Find $1 / 14 \; (mod \; 33)$ \\
+    First note that $gcd(14,33) = 1$, therefore, the inverse of $14$ exists in $(mod \; 33)$.
+    \begin{align*}
+        1 / 14 \Leftrightarrow 1 &= c \cdot 14 &&\text{in $\ZZ_{33}$} \\
+        1 &= c \cdot 14 + q \cdot 33 &&\text{in $\ZZ$} \\
+    \end{align*} By the euclidean algorithm, we get $c = -7, q = 3$
+    $$\frac{1}{14} \equiv -7 \equiv -7 + 33 = 26 \; \; (mod \; 33)$$ 
+\end{example}
+
+\begin{theorem}
+    $\ZZ_m$ is a ring. But for special $m$, $\ZZ_m$ is a field. More precisely,
+    $$\ZZ_m \text{ is a field} \Longleftrightarrow m \text{ is prime }$$
+\end{theorem}
+\begin{proof}
+    @TODO
+\end{proof}
+\marginnote{\textbf{A remark on notation}: $\ZZ_p = \mathbb{F}_p = GF(p)$ where $p$ is prime. $\mathbb{F}_p$ represents a finite field of $p$ elements.}
+\marginnote[0.2in]{There is exactly one field with $q$ elements in it. We know all the finite fields (take $q$ to be any prime power). The equality $\mathbb{F}_q = GF(q)$ always holds.}
+
+Next we briefly we discuss two special properties of fields.
+\begin{itemize}
+    \item \textbf{Cancellation Property}: If $a \cdot b = a \cdot c$ and $a \neq c$ then $b = c$. This is true because the multiplicative inverse of $a$ exists.
+    \begin{example}
+        (in $\ZZ_4$) $2 \cdot 2 = 2 \cdot 0$ but $2 \neq 0$
+    \end{example}
+    \item \textbf{Zero Divisions}: If $a \cdot b = 0$ and $a, b \neq 0$ then $a, b$ are zero divisions. There are \underline{no zero divisions in a field}. To see why, consider 
+    \begin{align*}
+        ab &= 0 \\
+        \frac{ab}{a} &= \frac{0}{a} &&\text{multiplicative inverse of $a$ exists}\\
+        b &= 0  &&\text{therefore it cannot be that $b \neq 0$}
+    \end{align*}
+\end{itemize}
+
+\section{The ISBN Code}
+\addtocounter{section}{1}
+
+\mgraphics{graphics/2023-10-26-19-29-49.png}{The ISBN code}
+
+The international standard book number. 
+\begin{itemize}
+    \item The first digit indicates the language
+    \item The next two digits indicate the publishers
+    \item The next six digits are assigned uniquely to every book
+    \item The final digit is chosen to make the whole 10-digit number $x_1x_2\dots x_10$ satisfy 
+    $$\sum_{i=1}^{10}ix_i \equiv 0 \: (mod \: 11)$$
+\end{itemize}
+
+Therefore, the ISBN code is a $q=11$ code with $n=10$. All codewords satisfy 
+$$1\cdot x_1 + 2 \cdot x_2 + \dots + 10 \cdot x_{10} = 0 \: \; \; (in \; \ZZ_{11})$$
+
+ISBN code is designed to 
+\begin{enumerate}
+    \item Detect 1 error 
+    \item Detect any error created by the transposition of two digits \footnote{this works because of the weight assigned to every digit in the sum}
+\end{enumerate}
+The error detection scheme is simply to calculate the sum talked about above and check whether this sum $Y \equiv 0 \; \; (mod \; 11)$
+
+ISBN codes cannot be used to correct errors unless we know that just one digit is in error. 
+
+\section{Vector Spaces over Finite Fields}
+\addtocounter{section}{1}
+
+For this section (and most of remainder of the course) we let our q-ary code have the alphabet $GF(q)$ (for prime $q$). The set $GF(q)^n$ forms a \textbf{vector space}.
+
+\begin{definition}
+    Vector space $\ZZ_p^n = \mathbb{F}_p^n = V(n,p)$
+\end{definition}
+
+\begin{example}
+    (in $\ZZ_5^3$) $\vec{x} = (1,2,2,0,1)$
+\end{example}
+
+We define two operations over a vector space. 
+\begin{enumerate}
+    \item \textbf{Addition of vectors}: 
+    $$(x_1, x_2, \dots, x_n) + (y_1, y_2 ,\dots, y_n) = (x_1+y_1, x_2+y_2, \dots, x_n + y_n)$$
+    \item \textbf{Scalar multiplication}:
+    $$c \cdot (x_1, \dots, x_n) = (cx_1, \dots ,cx_n)$$
+    for all $c \in \ZZ_p$.
+\end{enumerate}
+
+\begin{definition}
+    A basis for $\ZZ_p^n$ is a set of $n$ vectors $\{\vec{v_1},\dots, \vec{v_n}\}$ such that any vector $\vec{w} \in \ZZ_p^n$ can be expressed as 
+    $$\vec{w} = c_1\vec{v_1} + \dots + c_n\vec{v_n}$$
+    for unique $c_1, \dots, c_n \in \ZZ_p$ \\
+    Recall from linear algebra that 
+    $ \vec{v_1}, \dots, \vec{v_2} $ is a basis of $\ZZ_p^n$ iff 
+    \begin{itemize}
+        \item It spans that space $\ZZ_p^n$ \\
+        \item It is linearly independent
+    \end{itemize}
+\end{definition}
+\mgraphics{graphics/2023-10-26-12-38-54.png}{You can think of basis as defining the coordinate lines for a vector space}
+
+\begin{definition}
+    A subset $W \subseteq \ZZ_p^n$ is a \underline{subspace} if 
+    \begin{enumerate}
+        \item $\vec{0} \in W$
+        \item W is closed under addition and scalar multiplication
+        \begin{align*}
+            \vec{w_1}, \vec{w_2} \in W, c \in \ZZ_p & \Longleftrightarrow \vec{w_1} + \vec{w_2} \in W \\
+            & \Longleftrightarrow c \cdot w_1, c \cdot w_2 \in W  
+        \end{align*}
+    \end{enumerate}
+    A subspace $W$ is itself a vector space.
+\end{definition}
+
+\begin{theorem}
+    Solutions to a homogenous linear solution form a subspace. That is, the set of all solutions to 
+    $$c_1 \cdot x_1 + \dots + c_n \cdot x_n = 0$$
+    for all $c_1, \dots, c_n \in \ZZ_p$ form a subsapce of $\ZZ_p^n$.
+\end{theorem}
+
+\marginnote{\textbf{Remark}: Notice that, over $\ZZ_p$, we have that 
+$$c \cdot \vec{v} = \underbrace{\vec{v} + \dots \vec{v}}_{\text{$c$ times}}$$
+Therefore, closed under addition $\implies$ closed under scalar multiplication.
+This is \textbf{not true} over any other field}
+\begin{proof}
+    From linear algebra.
+\end{proof}
+
+\begin{definition}
+    The dimension of a subspace, denoted by $dim(W)$, is the number of vectors in its basis.
+\end{definition}
+
+\section{Linear Codes}
+\addtocounter{section}{1}
+
+Linear codes are given by the alphabet $\mathbb{F}_q (= \ZZ_q)$. The code is a subspace $C \subseteq \mathbb{F}_q^n$
+
+\mgraphics{graphics/2023-10-26-13-07-48.png}{Examples of linear codes}
+
+\textbf{Notation:} We have encountered the notation $(n,M,d)$ where 
+\begin{itemize}
+    \item $n$ is the length of the codewords
+    \item $M$ is the number of codewords in our code 
+    \item $d$ is the minimum distance of our code
+\end{itemize}
+For linear code, we introduce the following notation 
+\fwgraphics{graphics/2023-10-26-13-11-39.png}{Notation for linear codes}
+
+If our code $C$ has $dim(C) = k$, then it has $M = q^k$ codewords. To see why, notice that we have $k$ basis vectors, and so $k$ coefficients. Since we are in $\ZZ_q$ space, we have $q$ choices for each of these coefficients. This gives us $q^k$ possible vectors.
+
+\begin{definition}
+    The weight of a codeword is the number of non-zero entries.
+\end{definition}
+
+\begin{theorem}
+    Let $C$ be a linear code. Then we have that 
+    $$dist(C) = min \; weight(\vec{w})$$
+    for all $\vec{w} \in C$ such that $\vec{w} \neq \vec{0}$.
+\end{theorem}
+\textbf{Note}: To find minimum weight, you need to consider \underline{all} codewords of $C$, not just its basis vectors.
+
+Continuing our discussion of notation, earlier the only way to define a code was to either use set-builder notation or list all the codewords. With linear codes, we just list a basis for the code $C$. We package the basis vectors in a \textbf{generator matrix}.
+
+\begin{definition}
+    A $k \times n$ matrix whose rows form a basis of a linear $[n,k]$-code is called a \textbf{generator matrix}. 
+
+    \begin{center}
+        \begin{bmatrix}
+            \cdots & \vec{v_1} & \cdots \\ 
+            \cdots & \vec{v_2} & \cdots \\ 
+            & \vdots &  \\ 
+            \cdots & \vec{v_k} & \cdots \\ 
+        \end{bmatrix}
+    \end{center}
+\end{definition}
+
+\subsection{Standard form of the generator matrix}
+
+The standard form of the generator matrix is 
+\begin{center}
+    \begin{bmatrix}
+        I_k \;  \vline  \; A
+    \end{bmatrix}
+\end{center}
+where $I_k$ is the $k\times k$ identity matrix and $A$ is a $k \times (n-k)$ matrix.
+
+The following operations are allowed (and are guaranteed) to transform any generator matrix $G$ into the standard form 
+\begin{enumerate}
+    \item Permutation of rows
+    \item Multiplication of row by a non-zero scalar
+    \item Addition of scalar multiple of one row to another
+    \item Permutation of the columns
+    \item Multiplication of any column by a non-zero scalar
+\end{enumerate}
+
+For any given matrix $G$, first transform the matrix to reduced row-echelon form and then permute the columns to get to standard form. 
+
+\mgraphics{graphics/2023-10-26-22-05-26.png}{Getting to the standard form}
+
+\mgraphics{graphics/2023-10-26-20-12-38.png}{An example of transforming $G$ to the standard form}
+
+\section{Encoding and Decoding with a Linear Code}
+Every vector in a $[n,k]-$code can be written as 
+$$a_1\vec{v_1} + \dots + a_k\vec{v_k}$$
+To encode linear codes, we use the codeword 
+$$(a_1,a_2,\dots,a_k)$$
+By encoding the coefficients, we can obtain the actual codeword by
+$$[a_1,a_2,\dots,a_k]\cdot G = \sum_{i=1}^{k}a_ir_i$$
+where $r_i$ is a row of the generator matrix, i.e a basis vector.
+
+\subsection{Decode Decode Decode}
+\fwgraphics{graphics/2023-10-26-22-11-37.png}{Decoding: a visualization}
+
+Suppose we recieve a vector $\vec{y} = y_1\dots y_n$. Let the original vector that was sent be $\vec{x} = x_1\dots x_n$. Then we define the error vector to be 
+$$\vec{e} = \vec{y} - \vec{x} = e_1\dots e_n$$
+The decoding mechanism must decide from $y$ which codeword $x$ was transmitted, or, which error $e$ has occurred. 
+
+\begin{definition}
+    Suppose that $C$ is an $[n,k]$-code over $GF(q)$ and that $a$ is any vector in $V(n,q)$. Then the set $a+C$ is defined by 
+    $$a + C = \{a+x \; \vline \; x \in C\}$$
+    and is called a coset of $C$.
+\end{definition}
+
+\begin{theorem}
+    (Lagrange) Suppose $C$ is an $[n,k]$-code over $GF(q)$. Then 
+    \begin{enumerate}
+        \item every vector of $V(n,q)$ is in some coset of $C$
+        \item every coset contains exactly $q^k$ vectors
+        \item two cosets are either disjoint or coincide (partial overlap is impossible)
+    \end{enumerate}
+\end{theorem}
+The idea is very similar to nearest-neighbour decoding. It is summarized below:
+\begin{itemize}
+    \item Find the coset $\vec{y} + C$. 
+    \item Find the vector in this coset $\vec{e}$ with the smallest weight. 
+    \item Decode $\vec{y}$ as $\vec{w} = \vec{y} - \vec{e}$
+\end{itemize}
+
+\begin{lemma}
+    Suppose that $a+C$ is a coset of $C$ and that $b \in a + C$, then we have that $a + C = b + C$.
+\end{lemma}
+\begin{proof}
+    @TODO
+\end{proof}
+
+Note that while cosets are either exactly equal or disjoint, it is always true that every memeber of $V(n,q)$ lies in some coset of $C$. So how many cosets are there? Well, we know that each coset has $q^k$ members and that the parent space has $q^n$ members. This means that there must be $q^{n-k}$ \textbf{distinct} cosets.
+
+\begin{definition}
+    The vector having minimum weight is called the \underline{coset leader}. If there are two or more candidates for coset leader, anyone can be picked.
+\end{definition}
+
+\begin{definition}
+    A (Slepian) Standard Array for a $[n,k]-$code is a $q^{n-k}\times q^{k}$ array of all the vectors in $V(n,q)$. The first row lists all members of $C$, with $00\dots 0$ vector at the leftmost position in the row. The other rows are the cosets $a_i + C$, with the coset leader at the leftmost position. 
+\end{definition}
+
+\mgraphics{graphics/2023-10-26-23-52-41.png}{An example code}
+\mgraphics{graphics/2023-10-26-23-52-54.png}{Its standard array}
+
+An intuition: We know that, for linear codes, $d(x,y) = w(x-y)$. For a vector in any coset, the distance between it and its corresponding vector in $C$ is given by the coset leader. In other words, the minimum distance between $y \in a_i + C$ and $w \in C$ is $w(a_i)$. In this way, we find our closest neighbour. 
+
+Now, this simplifies decoding greatly. We no longer need to compare each digit to find the closest neighbour. But matrices can be get pretty big too. It can be tedious to find $\vec{y}$ in a large enough matrix. We tackle this problem next.
+
+\section{Dual Code, Parity-Check Matrix and Syndrome Decoding}
+@TODO
+% \marginnote{Golay codes most important paper written in coding theory history. The Voyager used the G23 code}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

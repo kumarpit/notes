@@ -1,0 +1,602 @@
+\documentclass{tufte-handout}
+
+%\geometry{showframe}% for debugging purposes -- displays the margins
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+% Set up the images/graphics package
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{graphics/}}
+
+\title{Math 319: Introduction to Real Analysis\thanks{Taught by Prof. Andrew Rechnitzer}}
+\author[The Tufte-LaTeX Developers]{Arpit Kumar}
+\date{Fall 2023/24}  % if the \date{} command is left out, the current date will be used
+
+% The following package makes prettier tables.  We're all about the bling!
+\usepackage{booktabs}
+
+% The units package provides nice, non-stacked fractions and better spacing
+% for units.
+\usepackage{units}
+
+% The fancyvrb package lets us customize the formatting of verbatim
+% environments.  We use a slightly smaller font.
+\usepackage{fancyvrb}
+\fvset{fontsize=\normalsize}
+
+% Small sections of multiple columns
+\usepackage{multicol}
+
+% Provides paragraphs of dummy text
+\usepackage{lipsum}
+
+% These commands are used to pretty-print LaTeX commands
+\newcommand{\doccmd}[1]{\texttt{\textbackslash#1}}% command name -- adds backslash automatically
+\newcommand{\docopt}[1]{\ensuremath{\langle}\textrm{\textit{#1}}\ensuremath{\rangle}}% optional command argument
+\newcommand{\docarg}[1]{\textrm{\textit{#1}}}% (required) command argument
+\newenvironment{docspec}{\begin{quote}\noindent}{\end{quote}}% command specification environment
+\newcommand{\docenv}[1]{\textsf{#1}}% environment name
+\newcommand{\docpkg}[1]{\texttt{#1}}% package name
+\newcommand{\doccls}[1]{\texttt{#1}}% document class name
+\newcommand{\docclsopt}[1]{\texttt{#1}}% document class option name
+
+
+\newcommand{\DD}{\mathbb{D}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\NN}{\mathbb{N}}
+
+
+\newcommand{\DS}{<a_1 \: a_2 \: ... \: a_m \; . \; b_1 \: b_2 \: ...>}
+\newcommand{\DSUM}{a_1 \: a_2 \: ... \: a_m + \sum_{j=1}^{k}\frac{b_j}{10^j}}
+
+
+\newcommand{\fancy}[1]{\mathcal{#1}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{warning}{Warning}[section]
+\newtheorem*{theorem}{Theorem}
+\newtheorem{example}{Example}
+
+\newcommand{\bold}[1]{\textbf{#1}}% bold face
+
+
+
+\newcommand{\mgraphics}[2]{
+\begin{marginfigure}%
+    \includegraphics[width=\linewidth]{#1}
+    \caption{#2}
+    \label{fig:marginfig}
+  \end{marginfigure}}
+\begin{document}
+
+\newcommand{\fwgraphics}[2]{
+\begin{figure}%
+    \includegraphics{#1}
+    \caption{#2}
+    \label{fig:marginfig}
+    \setfloatalignment{b}
+  \end{figure}}
+\begin{document}
+
+\begin{document}
+
+\maketitle% this prints the handout title, author, and date
+
+\begin{abstract}
+\noindent These are my class notes, further research and a possibly random collection of facts from this course.
+\end{abstract}
+
+%\printclassoptions
+
+\section{Digit Strings}\label{sec:digit-strings}
+\addtocounter{section}{1}
+
+\newthought{There are several} ways to define and construct the set of real numbers. We follow the approach largely attributed to Weierstrass, of using \bold{digit strings}. Thinking of real numbers as strings of digits has the benefit of being very explicit, but comes at the expense of the following annoying technicality.
+
+$$ 1.000... = 0.999... $$
+
+\begin{proof}
+  Let $x = 0.999...$, then we can say that $10x = 9 + x$, which implies $9x = 9 \implies x = 1$
+\end{proof}
+
+
+\begin{definition}
+  \bold{Digit Strings} are defined as 
+  $$<+a_1 \: a_2 \: ... \: a_m \; . \; b_1 \: b_2 \: ...> \text{or} <-a_1 \: a_2 \: ... \: a_m \; . \; b_1 \: b_2 \: ...>$$
+  where \begin{itemize}
+    \item each digit \bold{$a_i, b_j$} lies in the set $\{0,1, ... ,9\}$
+    \item the leading digit $a_1$ cannot be zero unless $m = 1$
+    \item the string $<-0.000...>$ is forbidden (only one definition of zero is allowed, i.e $<+0.000...>$)
+    \item we denote the set of all digit strings by $\DD$
+  \end{itemize}
+\end{definition}
+
+To connect this construct to real numbers, we need a mapping $$f: \DD \to \RR$$
+Consider $$f(d \in \DD) = \underbrace{a_1 \: a_2 \: ... \: a_m}_{\in \; \ZZ} + \sum_{k=1}^{\infty}\frac{b_k}{10^k}$$
+This seems to serve our purpose - but - we haven't defined the meaning of convergence yet, and as such should not be using an infinite sum in our mapping.
+
+\begin{definition}
+  \bold{Terminating and deceptive digit strings.} Let $x = <\pm a_1 \: a_2 \: ... \: a_m \; . \; b_1 \: b_2 \: ...>$. Then 
+  \begin{itemize}
+    \item If there exists some $k$ so that $b_k = b_{k+1} = b_{k+2} = ... = 9$ then we say that $x$ is \bold{deceptive}.
+    \item If there exists some $k$ so that $b_k = b_{k+1} = b_{k+2} = ... = 0$ then we say that $x$ is \bold{terminating}.
+  \end{itemize}
+\end{definition}
+
+We use $\DD_0$ to denote the set of all terminating digit strings. Similarly, we use $\DD_9$ to denote the set of all deceptive digit strings. \footnote{Note that it is easy to map $\DD_0$ to $\QQ$ since we no longer need an infinite sum. Consider $x = <\pm a_1 \: a_2 \: ... \: a_m \; . \; b_1 \: b_2 \: ... b_l>$. As a rational, x = $\underbrace{a_1 \: a_2 \: ... \: a_m}_{\in \; \ZZ} + \underbrace{\sum_{k=1}^{l}\frac{b_k}{10^k}}_{\in \; \QQ}$.}
+
+
+\section{Truncations and Orders}
+\addtocounter{section}{1}
+
+\begin{warning}
+  To simplify technicalities in our proofs, we will only be considering the positive digit strings in our argument. Arguing for the other cases follows closely from the positive case.
+\end{warning}
+
+\begin{definition}
+  Given a digit string $x = <a_1 \: a_2 \: ... \: a_m \; . \; b_1 \: b_2 \: ...>$ we define the truncation of $x$ to $k$ places to be $<+a_1 \: a_2 \: ... \: a_m \; . \; b_1 \; b_2 \;\underbrace{0 \; 0 \; 0 \;}_{append \; zeros} \; ...>$
+
+  $t_k : \DD \to \DD_{0}$
+\end{definition}
+
+\begin{definition}
+  We define rational truncation $T_k: \DD \to \QQ$ by $$T_k(x) = a_1 \: a_2 \: ... \: a_m + \sum_{j=1}^{k}\frac{b_j}{10^j}$$
+\end{definition}
+
+Observe that $10^k \cdot T_k(x) \in \ZZ$
+
+Also notice that $T_k(x)$ does not change much with $k$. Consider $x = <1.732150808...>$, then 
+\begin{align*}
+  T_2(x) &= \frac{173}{100} \\
+  T_3(x) &= \frac{1732}{1000} \\
+  T_4(x) &= \frac{1732}{1000} + \frac{1}{10^4} \\
+  &\vdots \\
+  T_{k+1} &= T_k(x) + \frac{b_k}{10^k}
+\end{align*}
+
+We can see that the sequence of $T_k(x)$ is weakly monotonically increasing.
+
+\begin{lemma}
+  Let $x \in \DD$, then 
+  $T_k(x) \leq T_{k+1}(x) < T_k(x) + 10^{-k}$
+\end{lemma}
+
+\begin{proof}
+  Let $x = \DS$. Then $$T_k(x) = \DSUM$$ and $$T_{k+1}(x) = T_k(x) + b_{k+1} \cdot 10^{-k-1}$$ 
+  Since $b_{k+1} \geq 0$ and $\leq 9$, the inequality follows.
+\end{proof}
+
+Truncations gives us a way to order digit strings. Let $x,y \in \DD$, then $x < y$ when there is some $k$ such that $T_k(x) < T_k(y)$.
+
+\begin{warning}
+  Note that in the reals, $1 = 0.999...$, BUT in digit strings, we have that $1.000... \; > \; 0.999...$\footnote{Ommitted the angular brackets wrapping digits strings here since that just looked ugly}
+\end{warning}
+
+
+\begin{definition}
+  Let $x,y \in \DD$. We say that $x < y$ when there exists some $k$ such that $T_k(x) < T_k(y)$. 
+  We say $x \leq y$ when $x < y$ or $\underbrace{x=y}_{\text{every single digit is equal}}$
+\end{definition}
+
+\begin{lemma}
+  Let $x,y \in \DD$. Then, $$T_k(x) < T_k(y) \implies \forall l \geq k, T_l(x) < T_l(y)$$
+\end{lemma}
+
+
+\begin{proof}
+  @TODO
+\end{proof}
+
+We are working towards trichotomy for $\DD$. That is, we want $x,y \in \DD$ such that exactly one of \begin{align*}
+  x &< y \\
+  x &= y \\
+  x &> y \\
+\end{align*}
+is true.
+
+\begin{lemma}
+  Let $x,y \in \DD$, then it cannot be that $x < y$ and $y > x$
+\end{lemma}
+
+\begin{proof}
+  Assume the contrary that $x < y$ and $y < x$. Then we have $k, l$ such that $T_k(x) < T_k(y)$ and $T_l(y) > T_l(x)$. Note that $k \neq l$ since $T_k(...)$ is a rational, i.e are trichotomous. So we get two cases, $k < l$ and $l > k$. \\
+  If $k < l$, then $T_k(x) < T_k(y)$ and $T_l(x) > T_l(y)$ which contradicts \bold{lemma 0.2} (2.2.6 in text). A similar argument can be made for the remaining case. Hence the result holds.
+\end{proof}
+
+Therefore, we have shown that $\DD$ is trichotomous. Or have we? We still need to consider the case of equality and inequality.
+
+\begin{proof}
+  @TODO
+  
+\end{proof}
+
+\begin{definition}\footnote{We can say that trichotomy + transitivity = order. Also note that trichotomy does not imply transitivity.}
+  Let $\fancy{R}$ be a relation on a set $\fancy{A}$. We say that $\fancy{R}$ is an order when \begin{itemize}
+    \item If $x,y \in \fancy{A}$ then exactly one of $x \; \fancy{R} \; y$ or $x = y$ or $y \; \fancy{R} \; x$ is true.
+    \item $\fancy{R}$ is transitive.
+  \end{itemize}
+\end{definition}
+
+\section{Not quite dense...}
+\addtocounter{section}{1}
+
+@TODO
+
+\section{Bounds and supremum}
+\addtocounter{section}{1}
+
+@TODO
+
+\section{Defining real numbers}
+\addtocounter{section}{1}
+
+Informally, we define a mapping from $\DD \to \RR$ as follows
+\begin{itemize}
+  \item We transform a digit string $x = \DS$ to a decimal expansion $a_1 \cdots a_m \; . \; b_1b_2 \cdots$
+  \item \bold{except} when $x$ is deceptive, in which case we map it to it's terminating pair. This ensures a single expansion for each digit string.
+\end{itemize}
+
+More formally, we use equivalence classes to define this mapping.
+
+\begin{definition}
+Let $x,y \in \DD$. We say that $x \equiv y$ when 
+\begin{itemize}
+  \item $x = y$ or
+  \item $x,y$ are a terminating-deceptive sibling pair (i.e $y = \psi(x)$)
+\end{itemize}
+and otherwise we write $x \not\equiv y$. This defines a equivalence relation on $\DD$.
+\end{definition}
+
+We can define the real numbers as equivalence classes of this relation.
+\begin{definition}
+  The real numbers $\RR$ are the set of equivalence classes of digit strings under the equivalence relation '$\equiv$'.
+\end{definition}
+
+@TODO
+
+\section{Arithmetic}
+\addtocounter{section}{1}
+
+We know use our work so far to define arithmetic on the reals. We will prove that $\RR$ is ordered field (like $\QQ$) with LUB property. We use the supremum as a sneaky way to calculate limits.
+\subsection{Addition, subtraction, multiplication, division}
+@TODO
+
+Homework hint: ($\sqrt{2}$ proof question) Let $a \in \RR$, such that $a^2 < 2$. Show that we can construct $a + \frac{1}{n}, n \in \NN$ such that $(a + \frac{1}{n})^2 < 2$. We want to say that $n$ is really, really big. \\
+$a^2 + \frac{2a}{n} + \frac{1}{n^2} < 2$ \\
+$\frac{2a}{n}+\frac{1}{n^2} < 2 - a^2$ \\
+Factoring and some tricks we get
+$$\frac{1}{n}\left(2a + \frac{1}{n}\right) \leq \frac{1}{n}(2a+1) \overbrace{<}^{\text{require}} 2-a^2$$
+
+The whole point of digit strings was to prove $LUB$ on the reals.
+
+We have $\RR$, it has LUB $\to$ so what? What can we do with this fact?
+
+\begin{theorem}
+  Let $x,y \in \RR$, then $$|x+y| \leq |x| + |y| \text{triangle inequality}$$
+  $$|x-y| \geq \left||x| - |y|\right| \text{reverse triangle inequality}$$
+\end{theorem}
+
+\begin{proof}[Proof of reverse triangle inequality]
+  Start with the TI with $x,y$ 
+  \begin{align*}
+    |x+y| &\leq |x| + |y| && \text{set $y = b-a$ and $x=a$}\\
+    |b| &\leq |a| + |b-a| \\
+    -|b-a| &\leq |a| - |b| 
+  \end{align*}
+
+  Now set $x = a-b$, $y=b$
+  \begin{align*}
+    |a| \leq |a-b| + |b| \\
+    |a| - |b| \leq |a-b|
+  \end{align*}
+  Hence $-|b-a| \leq |a|-|b|\leq |b-a|$ so $$||a| - |b|| \leq |b-a|$$
+\end{proof}
+
+\subsection{Archimedes}\footnote{Archimedes basically wrote down that we can measure things with a ruler}
+\begin{theorem}
+  Let $x,y \in \RR$ with $x,y > 0$. Then there is $n \in \NN$ such that $nx > y$
+\end{theorem}
+\begin{proof}
+  Assume to the contrary that there are $x,y \in \RR$, $x,y > 0$ so that for all $n \in \NN , nx \leq y$
+
+  Consider the set $A = \{ nx \text{st} n \in \NN \}$ \\
+  It has an upper bound (by assumption) of $y$ \\
+  Since $A \neq \emptyset$, the LUB tells us $u = sup A$ exists and is in $\RR$.
+  \begin{itemize}
+    \item $u = \text{upperboud}$ so $nx \leq u$ for all $ n \in \NN$.
+    \item Since $u = sup A$, $u-x$ is not an upperbound.
+  \end{itemize}
+  Hence there is $k \in \NN$ such that $u-x < kx \leq u$. But then 
+  $$u < (k+1)x \leq u+x$$
+  However, $(k+1)x \in A$ which contradicts the fact that $u = sup A$. Hence there is no such $x,y$. Thus, the result holds.
+\end{proof}
+
+
+\begin{corollary}
+  The following are logically equivalent \footnote{Instead of proving all pairs, you prove a cycle - $A \implies B \implies C \implies A$, this is a very standard proof structure to use}
+  \begin{itemize}
+    \item For all $x,y \in \RR^{+}$, there is $n \in \NN$, such that $nx > y$.
+    \item For all $x \in \RR^{+}$, there is $n \in \NN$ such that $n > x$ (set x = 1 and y = x)
+    \item For all $x \in \RR^{+}$, there is $n \in \NN$ such that $0 < \frac{1}{n} < x$
+  \end{itemize}
+\end{corollary}
+
+\begin{proof}
+  We show that $(1) \implies (2) \implies (3) \implies (1)$ 
+  \begin{itemize}
+    \item $(1) \implies (2)$ Assume (1), then set $x = 1$, $y=x$
+    \item $(2) \implies (3)$ Assume $(2)$. Let $x \in \RR^{+}$ and set $y = \frac{1}{x} > 0$ \\ Then $(2)$ tells us there is $n \in \NN$ such that $n > y > 0$. So multiply by $x$ divide by $n$ to get $$0 < \frac{1}{n} < x$$ as required
+    \item $(3) \implies (1)$ Assume $(3)$. Let $x,y \in \RR^{+}$. $(3)$ tells us there is $n \in \NN$ such that ... just multiply by $ny$ to get $y < n < x$ as required.
+  \end{itemize}
+\end{proof}
+
+Want to show that $\QQ$ is dense inside $\RR$
+\begin{corollary}
+  Let $x,y \in \RR$ with $x < y$. Then there is $z \in \QQ$ such that $x < z < y$
+\end{corollary}
+\begin{proof}
+  @TODO homework
+\end{proof}
+
+\begin{lemma}
+  Let $x,y \in \RR$ such that $1 < y-x$. Then there is $n \in \ZZ$ such that $x < n < y$
+\end{lemma}
+\begin{proof}
+  @TODO also homework 
+\end{proof}
+
+\subsection*{Nested intervals (equivalent to LUB)}
+Rough idea: Take a sequence of intervals $I_1 \supset I_2 \supset I_3 \supset \cdots I_n \supset \cdots$, then (with some conditions), there is a unique real that sits inside all $I_s$.
+
+\begin{definition}
+  Let $a,b \in \RR$. \begin{itemize}
+    \item The closed interval $[a,b] = \{ x \in \RR \: \text{such that} \: a \leq x \leq b \}$
+    \item The open interval $(a,b) = \{ x \in \RR \: \text{such that} \: a < x < b \}$
+    \item Length of interval $|I| = |b-a|$
+  \end{itemize}
+\end{definition}
+
+A motivating example
+\begin{align*}
+  \sqrt{17} &\in I_1 = [1,17] \\
+  &\in I_2 = [1,9] \\
+  &\in I_3 = [1,5] \\
+  &\in I_4 = [3,5] \\
+  &\in I_5 = [4,5] \\
+\end{align*}
+
+We need to prove that there is something unique that lies in all these intervals.
+
+@TODO Lot's of holes
+
+\section{20 October}
+\addtocounter{section}{1}
+
+Last time
+\begin{itemize}
+  \item Finished IVT 
+  \item Started EVT, boundedness
+  \begin{lemma}
+    Let $g: [a,b] \to \RR$ if $g$ is continuous then $g$ is bounded
+  \end{lemma}
+\end{itemize}
+
+\begin{theorem}
+  Let $f:[a,b] \to \RR$ be continuous then there exists $c,d \in [a,b]$ such that
+  $$f(c) \leq f(x) \leq f(d) $$ for all $x \in [a,b]$
+\end{theorem}
+Essentially telling us that 
+$f([a,b]) = [f(c), f(d)]$ \\
+Not necessarily takes open intervals to open intervals!
+\begin{example}
+  $f:(-1,1) \to [0,1) \text{ by} f(x) = x^2$
+\end{example}
+But it does take closed intervals to closed intervals.
+
+\begin{proof}
+  Let $f$ be as given and form 
+  $$Y = \{f(x) \text{ such that } x \in [a,b]\}$$
+  $Y \neq \emptyset$ and from the lemma above, we know that a continous function on a closed interval is bounded. Therefore, $M  = sup Y$ exists.
+
+  If there is $d \in [a,b] \text{ such that } f(d) = M$ we are done. \footnote{is this cheating? feels like it, very direct} \\
+  So now, to the contrary, assume that there is no such $d \in [a,b]$. Form $$g:[a,b] \to \RR = \frac{1}{M-f(x)}$$
+  Since $f(x) < M$ (by assumption) and $M - f(x) \neq 0$ for all $x \in [a,b]$ so $g$ is continuous on $[a,b]$ and $g$ is also bounded. \footnote{notice how a contradiction is going to show up - $g$ is going to blow up since $f(x)$ comes arbitrarily close to $M$}
+
+  Since $M = sup Y$, for any $\epsilon > 0$, we know $M - \epsilon$ is not an upperbound. Pick $\epsilon = 1/n$ then there is $Y_n \in Y$ such that $M-\epsilon < Y_n < M$. Hence there is $x_n \in [a,b]$ such that $f(x_n) > M - \epsilon$. Thus $g(x_n) = \frac{1}{M - f(x_n)} > \frac{1}{\epsilon} = n$.\footnote{you could also use this to show that $g$ is not continuous at that point}
+  So $g$ is unbounded and cannot be continuous, giving our contradiction. Thus, there exists $d \in [a,b]$ such that $f(d) = M$.
+  The argument for the minimum is similar.
+\end{proof}
+
+\section{Derivatives}
+\addtocounter{section}{1}
+
+\begin{definition}
+  Let $f$ be a function defined on a neighbourhood of $c$. We say $f$ is differentiable at $c$ when $$\lim_{x\to c} \frac{f(x) - f(c)}{x-c} = \lim_{h\to 0}\frac{f(c+h) - f(c)}{h} = f'(c)$$ exists, we call $f'(c)$ the derivative of $f$ at $c$. If $f'(x)$ exists for all $x \in (a,b)$ we say $f$ is differentiable on $(a,b)$.
+\end{definition}
+
+\begin{example}
+  $g(x)=|x|$ then 
+  $$g'(x) = \begin{cases}
+    +1 & x > 0 \\
+    -1 & x < 0 \\
+    DNE & x = 0
+  \end{cases}$$
+
+\end{example}
+
+\begin{lemma}
+  If $f$ is differentiable at $c$, then $f$ is continuous at $c$. Converse is false.
+  If $f$ is differentiable on $\DD$, then $f$ is continuous on $\DD$. At the same time, the derivative function $f'$ need not be continuous on $\DD$.
+\end{lemma}
+\begin{proof}
+  @Homework
+\end{proof}
+
+\begin{definition}
+  Let $f:\DD \to \RR$ be a function. Then derivative function $f'(x)$ is 
+  $$f'(x) = \lim_{h\to 0}\frac{f(x+h) - f(x)}{h}$$
+  The domain of $f'$ is the subset of $\DD$ where $f'(x)$ exists.
+\end{definition}
+
+
+\begin{definition}
+  Let $f:[a,b] \to \RR$ be differentiable at $c \in [a,b]$. The tangent line to $f$ at $c$ is given by $$T(x) = f(c) + f'(c)\cdot (x-c)$$
+\end{definition}
+\mgraphics{graphics/2023-10-20-12-41-05.png}{Tangent line to $f$}
+
+\begin{lemma}
+  Let $f$ be differentiable at $c$ and $T$ be the tangent line at $c$. Then, 
+  $$\lim{x\to c}\frac{f(x) - T(c)}{x-c} = 0$$
+  Further, $T$ is the unique linear function with this property.
+\end{lemma}
+
+\begin{proof}
+  Let $f, T$ be as stated. Then 
+  $$\frac{f(x) - T(x)}{x-c} = \frac{f(x) - (f(c)+(x-c)\cdot f'(c))}{x-c} = \frac{f(x) - f(c)}{x-c}-f'(c)$$
+  So limit goes to 0 as required.
+  Uniqueness = @Homework.
+\end{proof}
+
+To make proofs of chain rule, etc work, it helps to be able to say 
+$f(x)$ "look like" $T(x)$ at $x=c$
+$$f(x) = f(c) + (x-c)\phi(x)$$
+
+$\phi(x)$ looks like $f'(c)$ and 
+$$\lim_{x\to c}\phi(x) = f'(c)$$
+
+\begin{theorem}
+  If $g$ is differentiable at $x=c$ then there exists $\phi$ such that $g(x) - g(c) = \phi(x)(x-c)$ and $\phi$ is continuous with $\lim_{x\to c}\phi(x)=\phi(c) = g'(c)$. \\
+  The converse also holds. If you can find such a $\phi$ then $g$ is differentiable at $c$ with $g'(c)=\phi(c)$.
+\end{theorem}
+\begin{proof}
+  Let 
+  $$\phi(x) = \begin{cases}
+    g'(c) & x=c \\
+    \frac{g(x)-g(c)}{x-c} & x\neq c \\
+  \end{cases}
+  $$
+  Since $g$ is differentiable at $c$, we know 
+  $$\lim_{x\to c}\phi(x) = \lim_{x\to c}\frac{g(x)-g(c)}{x-c}=g'(c)$$
+  So $\phi$ is continuous at $x=c$.
+
+  Conversely, if such a continuous $\phi$ exists then $$\phi(x) = \frac{g(x)-g(c)}{x-c}$$ So $\lim_{x\to c}\phi(x)$ exists since $\phi$ is continuous at $c$ and so $\phi(c) = g'(c)$ and so $g$ is differntiable at $x=c$.
+\end{proof}
+
+\subsection{Proof of the Product Rule!}
+\begin{proof}
+  Assume $f,g$ is differentiable at $x=c$, then by the theorem above we have that
+  \begin{align*}
+    f(x) = f(c) + \phi(x)\cdot (x-c) \st \phi(x) = f'(c) \\
+    g(x) = g(c) + \gamma(x)\cdot (x-c) \st \gamma(x) = g'(c) \\
+  \end{align*}
+  $$\frac{d}{dx}\left(f \cdot g \right) |_{x=c} = \lim_{x\to c}\left(\frac{f(x) \cdot g(x) - f(c) \cdot g(c)}{x-c}\right)$$
+  Which boils down to 
+  \begin{align*}
+    &= \lim_{x\to c}\left[\f(c)+\phi(x)(x-c)\right] \left[g(c) + \gamma(x)(x-c)\right]-f(c)g(c) \\
+    &= \lim_{x \to c}\left[\frac{g(c)\phi(x)(x-c)+f(c)\gamma(x)(x-c)+\phi \cdot \gamma(x-c)^2}{x-c}\right] \\
+    &= \lim_{x\to c}\left[g(c)\phi(x)+f(c)\gamma(x)+(x-c)\phi(x)\gamma(x)\right] \\
+    &= g(c)f'(c) + f(c)g'(c) + 0
+  \end{align*}
+\end{proof}
+
+\subsection{Proof of Chain Rule}
+\begin{proof}
+  $f$ is defined around $c$ and differentiable at $c$ \\
+  $g$ is defined around $f(c)$ and differentiable at $f(c)$ \\
+  By the theorem above, we have that 
+  \begin{align*}
+    &f(x) = f(c) + \phi(x)(x-c) &&\phi(c)=f'(c) \\
+    &g(t) = g(d) + \gamma(t)(t-d) &&d = f(c), \gamma(d) = g'(d) \\
+  \end{align*}
+  And so 
+  \begin{align*}
+    g(f(x)) &= g(d)+\gamma(f(x))(f(x) - d) \\
+    &= g(f(c))+\gamma(f(x))\cdot (f(x) - f(c)) \\
+    \frac{g(f(x)) - g(f(c))}{x-c} &= \frac{\gamma(f(x))(f(x) - f(c))}{x-c}
+  \end{align*}
+  Which gives $$\lim_{x\to c} = \frac{d}{dx}(g(f(x)))|_{x=c} = \gamma(f(c))\cdot f'(c) = g'(f(c))f'(c)$$
+\end{proof}
+
+\begin{theorem}
+  Arithmetic of derivatives \\
+\end{theorem}
+\begin{proof}
+  Consider $$g(x) = \begin{cases}
+    x^2sin(1/x) & x \neq 0 \\
+    0 & x = 0 \\
+  \end{cases}$$
+  If $x \neq 0$ then $g'(x) = 2xsin(1/x) - cos(1/x)$ \\
+  $$g'(0) = \lim_{x\to 0} \frac{g(x)-g(0)}{x}=\lim_{x\to 0}xsin(1/x)$$
+  Since $-x \leq xsin(1/x) \leq x$ and $\lim_{x\to 0}\pm x = 0$, by sandwhich theorem, $g'(0) = 0$. 
+
+  So $$g'(x) = \begin{cases}
+    xsin(1/x) - cos(1/x) & x \neq 0 \\
+    0 & x = 0 \\
+  \end{cases}
+  $$
+  This is not continuous at $x=0$ so $g$ is differentiable everywhere but its derivative is not continuous.
+\end{proof}
+
+Now consider 
+$$f(x) = \begin{cases}
+  x & x\in \QQ \\
+  0 & x \in \RR - \QQ \\
+\end{cases}
+$$
+is continuous at 0 but nowhere else. \\
+$$g(x) = \begin{cases}
+  x^2 & x \in \QQ \\
+  0 & \text{elsewhere}
+\end{cases}
+$$
+is differentiable at $0$ but nowhere else.
+\begin{proof}
+  $$g'(0) = \lim_{x\to 0} \frac{g(x)-g(0)}{x} = \lim_{x\to 0}\frac{g(x)}{x} = \lim_{x\to 0}f(x)$$
+  @TODO
+\end{proof}
+
+\section{Increasing, Decreasing and Derivative}
+\addtocounter{section}{1}
+
+\begin{lemma}
+  Let 
+  \begin{itemize}
+    \item $f: \DD \to \RR$ \\
+    \item $c \in \DD$ and $w > 0$ such that $(c-w, c+w) \subseteq \DD$ \\
+    \item $f$ is differentiable at $c$ with $f'(c) > 0$
+  \end{itemize}
+  Then, there is $\delta > 0$, so that 
+  \begin{itemize}
+    \item if $x \in (c, c+\delta )$ then $f(x) > f(c)$ \\
+    \item if $x \in (c-\delta, c)$ then $f(x) < f(c)$ \\
+  \end{itemize}
+  Similar statement for $f'(c) < 0$
+\end{lemma}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

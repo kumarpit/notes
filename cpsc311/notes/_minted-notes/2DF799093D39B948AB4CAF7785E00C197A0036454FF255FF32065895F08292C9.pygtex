@@ -1,0 +1,24 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{;; WAE symbol WAE \PYGZhy{}\PYGZgt{} WAE}
+\PYG{c+c1}{;; substitute val for free instances of sub\PYGZhy{}id in expr, avoiding the capture}
+\PYG{c+c1}{;; of any free identifier instances in wae2.}
+\PYG{c+c1}{;(define (ca\PYGZhy{}subst expr sub\PYGZhy{}id wae2) (num 0)) ; stub}
+\PYG{p}{(}\PYG{k}{define}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ca\PYGZhy{}subst}\PYG{+w}{ }\PYG{n}{wae0}\PYG{+w}{ }\PYG{n}{x0}\PYG{+w}{ }\PYG{n}{wae1}\PYG{p}{)}
+\PYG{+w}{    }\PYG{p}{(}\PYG{k}{local}\PYG{+w}{ }\PYG{p}{[}\PYG{p}{(}\PYG{k}{define}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{fn\PYGZhy{}for\PYGZhy{}wae}\PYG{+w}{ }\PYG{n}{wae}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{(}\PYG{n}{type\PYGZhy{}case}\PYG{+w}{ }\PYG{n}{WAE}\PYG{+w}{ }\PYG{n}{wae}
+\PYG{+w}{                }\PYG{p}{[}\PYG{n}{num}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{num}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{)]}
+\PYG{+w}{                }\PYG{p}{[}\PYG{n}{add}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{l}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{add}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{fn\PYGZhy{}for\PYGZhy{}wae}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{)}
+\PYG{+w}{                                }\PYG{p}{(}\PYG{n}{fn\PYGZhy{}for\PYGZhy{}wae}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{))]}
+\PYG{+w}{                }\PYG{p}{[}\PYG{n}{sub}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{l}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{sub}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{fn\PYGZhy{}for\PYGZhy{}wae}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{)}
+\PYG{+w}{                                }\PYG{p}{(}\PYG{n}{fn\PYGZhy{}for\PYGZhy{}wae}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{))]}
+\PYG{+w}{                }\PYG{p}{[}\PYG{n}{with}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{n}{named}\PYG{+w}{ }\PYG{n}{body}\PYG{p}{)}
+\PYG{+w}{                    }\PYG{p}{(}\PYG{k}{let}\PYG{+w}{ }\PYG{p}{(}\PYG{p}{[}\PYG{n}{g}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{gensym}\PYG{p}{)])}
+\PYG{+w}{                    }\PYG{p}{(}\PYG{n}{with}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{  }\PYG{c+c1}{;; notice we rename binding instance}
+\PYG{+w}{                             }\PYG{c+c1}{;; this ensures no clashes with our substitution}
+\PYG{+w}{                          }\PYG{p}{(}\PYG{n}{fn\PYGZhy{}for\PYGZhy{}wae}\PYG{+w}{ }\PYG{n}{named}\PYG{p}{)}
+\PYG{+w}{                          }\PYG{p}{(}\PYG{n}{fn\PYGZhy{}for\PYGZhy{}wae}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ca\PYGZhy{}subst}\PYG{+w}{ }\PYG{n}{body}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{id}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{)))}
+\PYG{+w}{                }\PYG{p}{[}\PYG{n}{id}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{symbol=?}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{)}
+\PYG{+w}{                            }\PYG{n}{wae1}
+\PYG{+w}{                            }\PYG{p}{(}\PYG{n}{id}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{))]))]]}
+\PYG{+w}{    }\PYG{p}{(}\PYG{n}{fn\PYGZhy{}for\PYGZhy{}wae}\PYG{+w}{ }\PYG{n}{wae0}\PYG{p}{)))))}
+\end{Verbatim}

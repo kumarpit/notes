@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{for}\PYG{+w}{ }\PYG{n+nx}{each}\PYG{+w}{ }\PYG{n+nx}{perfect}\PYG{+w}{ }\PYG{n+nx}{matching}\PYG{+w}{ }\PYG{n+nx}{M}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{i}\PYG{p}{.}\PYG{n+nx}{e}\PYG{+w}{ }\PYG{n+nx}{a}\PYG{+w}{ }\PYG{n+nx}{potential}\PYG{+w}{ }\PYG{n+nx}{solution}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{do}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{n+nx}{M}\PYG{+w}{ }\PYG{n+nx}{is}\PYG{+w}{ }\PYG{n+nx}{stable}
+\PYG{+w}{        }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{M}
+\PYG{k}{return}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}no solution\PYGZdq{}}
+\end{Verbatim}

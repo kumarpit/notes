@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}\PYG{n}{with}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{x}\PYG{+w}{ }\PYG{n}{e1}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{add}\PYG{+w}{ }\PYG{n}{e1}\PYG{+w}{ }\PYG{n}{e2}\PYG{p}{\PYGZcb{}\PYGZcb{}}
+\PYG{+w}{    }\PYG{c+c1}{;; equivalent to}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}\PYG{n}{fun}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{x}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{add}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{n}{e2}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{n}{e1}\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

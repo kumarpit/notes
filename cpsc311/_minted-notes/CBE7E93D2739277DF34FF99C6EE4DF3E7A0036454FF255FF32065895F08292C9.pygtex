@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\PYG{o}{\PYGZsq{}}\PYG{l+s+ss}{x}\PYG{+w}{  }\PYG{c+c1}{;; x occurs free in this WAE expression}
+\PYG{c+c1}{;; ERROR x is unbound}
+
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{+}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+s+ss}{y}\PYG{p}{\PYGZcb{}}
+\PYG{c+c1}{;; ERROR x is unbound}
+
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{with}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{y}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{c+c1}{;; x occurs free in this WAE expression}
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{with}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{y}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{l+s+ss}{y}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{c+c1}{;; x occurs free in this WAE expression}
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{with}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{with}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{y}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{l+s+ss}{z}\PYG{p}{\PYGZcb{}\PYGZcb{}}\PYG{+w}{ }\PYG{c+c1}{;; x occurs bound, z occurs free, y is bound}
+\PYG{c+c1}{;; but does not occur}
+\end{Verbatim}

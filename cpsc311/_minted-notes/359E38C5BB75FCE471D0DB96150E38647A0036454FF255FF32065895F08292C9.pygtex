@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{;(define WAES3 \PYGZsq{}\PYGZob{}with \PYGZob{}x \PYGZob{}+ 5 5\PYGZcb{}\PYGZcb{} \PYGZob{}+ x x\PYGZcb{}\PYGZcb{})}
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{with}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{+}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{\PYGZcb{}\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{+}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}\PYGZcb{}}
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{with}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+m+mi}{10}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{+}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}\PYGZcb{}}
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{+}\PYG{+w}{ }\PYG{l+m+mi}{10}\PYG{+w}{ }\PYG{l+m+mi}{10}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{c+c1}{;; replace all \PYGZdq{}free\PYGZdq{} occurrences of x with the bound value}
+\PYG{o}{\PYGZsq{}}\PYG{l+m+mi}{20}
+
+\PYG{c+c1}{;; \PYGZdq{}free\PYGZdq{} instance means that there isn\PYGZsq{}t a surrounding \PYGZdq{}with\PYGZdq{}}
+\end{Verbatim}

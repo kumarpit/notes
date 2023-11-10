@@ -1,0 +1,26 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{rest}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cons}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{p}{))}
+\PYG{o}{.}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{n}{rest:}\PYG{+w}{ }\PYG{k}{contract}\PYG{+w}{ }\PYG{n}{violation}
+\PYG{+w}{  }\PYG{n}{expected:}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{and/c}\PYG{+w}{ }\PYG{n+nb}{list?}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{not/c}\PYG{+w}{ }\PYG{n+nb}{empty?}\PYG{p}{))}
+\PYG{+w}{  }\PYG{n}{given:}\PYG{+w}{ }\PYG{o}{\PYGZsq{}}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{p}{)}
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{car}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cons}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{p}{))}
+\PYG{l+m+mi}{5}
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cdr}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cons}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{p}{))}
+\PYG{l+m+mi}{6}
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{car}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cdr}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cons}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cons}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cons}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{+w}{ }\PYG{n+nb}{empty}\PYG{p}{)))))}
+\PYG{l+m+mi}{6}
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cadr}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cons}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cons}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cons}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{+w}{ }\PYG{n+nb}{empty}\PYG{p}{))))}
+\PYG{l+m+mi}{6}
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cons?}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{cons}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{p}{))}
+
+\PYG{c+c1}{;; quasiquotes \PYGZhy{} like quotations, but sometime not quote}
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{quasiquote}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{l+s+ss}{empty}\PYG{p}{))))}
+\PYG{o}{\PYGZsq{}}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{l+s+ss}{empty}\PYG{p}{)}
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{quasiquote}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{unquote}\PYG{+w}{ }\PYG{n+nb}{empty}\PYG{p}{)))))}
+\PYG{o}{\PYGZsq{}}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{p}{)}
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{define}\PYG{+w}{ }\PYG{n}{L}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{list}\PYG{+w}{ }\PYG{l+m+mi}{8}\PYG{+w}{ }\PYG{l+m+mi}{9}\PYG{+w}{ }\PYG{l+m+mi}{10}\PYG{p}{))}
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{quasiquote}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{unquote}\PYG{+w}{ }\PYG{n}{L}\PYG{p}{)))))}
+\PYG{o}{\PYGZsq{}}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{+w}{ }\PYG{l+m+mi}{8}\PYG{+w}{ }\PYG{l+m+mi}{9}\PYG{+w}{ }\PYG{l+m+mi}{10}\PYG{p}{)}
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{o}{`}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{+w}{ }\PYG{o}{.}\PYG{+w}{ }\PYG{o}{,}\PYG{n}{L}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{;; allows to eval expr inside quotes}
+
+\end{Verbatim}

@@ -1,1 +1,13 @@
-.DS_Store
+*.aux
+*.log
+*.synctex.gz
+*.out
+*.zip
+*.DS_Store
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+.vscode
+.l*
+._minted-notes

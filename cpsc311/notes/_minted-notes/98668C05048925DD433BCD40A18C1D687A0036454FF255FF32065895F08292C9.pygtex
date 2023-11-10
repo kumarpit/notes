@@ -1,0 +1,23 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{+w}{    }\PYG{c+c1}{;; EXAMPLE 1}
+\PYG{+w}{    }\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{f}\PYG{+w}{ }\PYG{l+s+ss}{f}\PYG{p}{\PYGZcb{}}\PYG{+w}{  }\PYG{c+c1}{;; just replace f with this entire expr itself}
+\PYG{+w}{    }\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{f}\PYG{+w}{ }\PYG{l+s+ss}{f}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{f}\PYG{+w}{ }\PYG{l+s+ss}{f}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{c+c1}{;; and so on}
+
+\PYG{+w}{    }\PYG{c+c1}{;; EXAMPLE 2}
+\PYG{+w}{    }\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{a}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{b}\PYG{+w}{ }\PYG{l+s+ss}{a}\PYG{p}{\PYGZcb{}\PYGZcb{}}\PYG{+w}{  }\PYG{c+c1}{;; step rule: almost like with}
+\PYG{+w}{                        }\PYG{c+c1}{;; replace free occurence of a with this entire expr}
+\PYG{+w}{    }\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{b}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{a}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{b}\PYG{+w}{ }\PYG{l+s+ss}{a}\PYG{p}{\PYGZcb{}\PYGZcb{}\PYGZcb{}}
+\PYG{+w}{    }\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{a}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{b}\PYG{+w}{ }\PYG{l+s+ss}{a}\PYG{p}{\PYGZcb{}\PYGZcb{}}\PYG{+w}{  }\PYG{c+c1}{;; you don\PYGZsq{}t stick in b here because}
+\PYG{+w}{                        }\PYG{c+c1}{;; b is a binding instance here}
+\PYG{+w}{    }\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{b}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{a}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{b}\PYG{+w}{ }\PYG{l+s+ss}{a}\PYG{p}{\PYGZcb{}\PYGZcb{}\PYGZcb{}}
+\PYG{+w}{    }\PYG{c+c1}{;; and so on, remember to be METICULOUS}
+
+\PYG{+w}{    }\PYG{c+c1}{;; EXAMPLE 3}
+\PYG{+w}{    }\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{f}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fun}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{if0}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+m+mi}{9}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{f}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}\PYGZcb{}\PYGZcb{}\PYGZcb{}\PYGZcb{}}
+\PYG{+w}{    }\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fun}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{if0}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+m+mi}{9}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fix}\PYG{+w}{ }\PYG{l+s+ss}{f}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fun}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{if0}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+m+mi}{9}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{f}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}\PYGZcb{}\PYGZcb{}\PYGZcb{}\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}\PYGZcb{}\PYGZcb{}\PYGZcb{}}
+\PYG{+w}{    }\PYG{c+c1}{;; we are left with a fun \PYGZhy{}\PYGZgt{}}
+\PYG{+w}{    }\PYG{c+c1}{;; these are values in FWAE (functions are first\PYGZhy{}class)}
+\PYG{+w}{    }\PYG{c+c1}{;; and so we are done}
+\end{Verbatim}

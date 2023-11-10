@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{with}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{double}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fun}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{+}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}\PYGZcb{}\PYGZcb{}}
+\PYG{+w}{       }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{with}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{double}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}\PYGZcb{}\PYGZcb{}}
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{with}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fun}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{+}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}\PYGZcb{}}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}\PYGZcb{}}
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{fun}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{+}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{+w}{ }\PYG{l+s+ss}{x}\PYG{p}{\PYGZcb{}\PYGZcb{}}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{\PYGZcb{}}
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+s+ss}{+}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{\PYGZcb{}}
+\PYG{o}{\PYGZsq{}}\PYG{l+m+mi}{10}
+
+\PYG{c+c1}{;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;}
+\PYG{o}{\PYGZsq{}}\PYG{p}{\PYGZob{}}\PYG{l+m+mi}{7}\PYG{+w}{ }\PYG{l+m+mi}{9}\PYG{p}{\PYGZcb{}}
+\PYG{c+c1}{;; ERROR: 7 is not a procedure}
+\end{Verbatim}

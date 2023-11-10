@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{o}{\PYGZsq{}}\PYG{l+s+ss}{hello}\PYG{+w}{ }\PYG{c+c1}{;; symbol}
+\PYG{p}{(}\PYG{k}{quote}\PYG{+w}{ }\PYG{l+s+ss}{hello}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{;; or this}
+\PYG{p}{(}\PYG{n+nb}{symbol=?}\PYG{+w}{ }\PYG{o}{\PYGZsq{}}\PYG{l+s+ss}{hello}\PYG{+w}{ }\PYG{o}{\PYGZsq{}}\PYG{l+s+ss}{hi}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{;; \PYGZsh{}f}
+\PYG{p}{(}\PYG{n+nb}{string\PYGZhy{}\PYGZgt{}symbol}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}ma man!\PYGZdq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{;; gives \PYGZsq{}|ma man!|}
+\PYG{p}{(}\PYG{k}{define}\PYG{+w}{ }\PYG{n}{G1}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nb}{gensym}\PYG{p}{))}
+\PYG{n+nb}{\PYGZgt{}}\PYG{+w}{ }\PYG{o}{\PYGZsq{}}\PYG{l+s+ss}{g262412}
+\PYG{p}{(}\PYG{n+nb}{symbol=?}\PYG{+w}{ }\PYG{n}{G1}\PYG{+w}{ }\PYG{o}{\PYGZsq{}}\PYG{l+s+ss}{g262412}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{;; \PYGZsh{}f}
+\PYG{c+c1}{;; gensyms are never equal to any other symbol}
+\end{Verbatim}
