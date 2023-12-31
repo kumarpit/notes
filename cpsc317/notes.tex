@@ -73,7 +73,7 @@
 \begin{marginfigure}%
     \includegraphics[width=\linewidth]{#1}
     \caption{#2}
-    \label{fig:marginfig}
+    % \label{fig:marginfig}
   \end{marginfigure}}
 \begin{document}
 
@@ -81,7 +81,7 @@
 \begin{figure}%
     \includegraphics{#1}
     \caption{#2}
-    \label{fig:marginfig}
+    % \label{fig:marginfig}
     \setfloatalignment{b}
   \end{figure}}
 \begin{document}
@@ -248,6 +248,11 @@ Notice the checksum field - its purpose is to detect errors that may have occurr
 \mgraphics{graphics/2023-10-27-15-51-14.png}{Compute checksum}
 \mgraphics{graphics/2023-10-27-15-51-35.png}{Verify checksum}
 
+\section{Transport Layer Multiplexing and De-multiplexing}
+A host recieves IP datagrams (more on this later) - each datagram contains the source and desitnation IP addresses and one transport layer segment. Each segment contains the source and destination port numbers. The host uses IP addresses and port numbers to direct the segment to the appropriate socket.
+Since UDP only de-multiplexes on the basis of destination port number, it sends all datagrams from all origins to the same socket. TCP de-mutliplexes on the basis of the tuple (source IP, destination IP, source port, destination port). This is because TCP is connection oriented.
+
+
 \section{State Machines and Reliability}
 \subsection{Again, what is a protcol?}
 
@@ -312,9 +317,220 @@ Well, to solve this issue, the sender must be able to send mutliple segments wit
 @TODO
 
 \section{Network Layer}
+\mgraphics{graphics/2023-12-06-12-15-13.png}{The network service model}
+The network layer is implemented in each and every device connected to the internet and is really the glue that holds the internet together. It serves two functions:
+\begin{itemize}
+    \item \textbf{Forwarding:} move packets from a router's input link to appropriate output line
+    \item \textbf{Routing:} determine the route taken by packets from source to destination
+\end{itemize}
+
+\mgraphics{graphics/2023-11-11-10-05-21.png}{The network layer, notice how the IP protocol has nothing to do with the routing algorithm - that is a control plane function}
+
+
+The network layer has two sub-layers or planes:
+
+\begin{itemize}
+    \item \textbf{Data Plane}: local, per-router function that determines how datagram arriving at router is forwarded to output port
+    \item \textbf{Control Plane:} determines how datagram is routed across routers
+\end{itemize}
+Routers are the principal network devices in the network core, with a fairly simple job: examine the headaer fields in all IP datagrams passing through it and move them from input to output ports to enable transfer of the datagram along an end-to-end path.
+
+
 \subsection{History and Autonomous Systems}
+The internet is not really a network of end-systems - its a network of ISPs that have autonomous control over how they operate their share of the internet (i.e choosing what routing algorithms to use, etc). And so routers are organized into \textit{autonomous systems}, with each AS consisting of routers that under the same administrative control. Each AS is identified by its globally unique autonomous system number. Routers within the same AS all run the same routing algorithm and each have information about one another.
+
+Tier-1, Tier-2, Tier-3 networks. 
 
 
+
+\subsection{IP Addresses and Forwarding}
+\mgraphics{graphics/2023-11-11-10-03-31.png}{IPV6 Datagram}
+\fwgraphics{graphics/2023-11-11-10-07-55.png}{IPV4 Datagram, 20 bytes of IP overhead, 20 bytes of TCP overhead + application overhead}
+
+An IP address identifies \textbf{an interface} on the host, and not just the host. This is because a host connected to the internet can have multiple interfaces (WiFi, ethernet, etc).
+
+Device interfaces that can physically reach each other without passing through an intervening router are in the same \textbf{subnet}. IP addresses are structured to identify the subnet a host belongs in, then identifies the host (with the lower order bits) in that subnet.
+\mgraphics{graphics/2023-11-11-10-12-57.png}{Subnets}
+
+\marginnote{An octet is RFC-speak for a byte - anciently different computers had different sized bytes, hence an octet is more precise.}
+
+\subsection{A bit of IP history (pun intended)}
+
+\mgraphics{graphics/2023-12-06-11-44-10.png}{The IP protocol is what ties the internet together - is known as the waist of the internet}
+
+In the original IP addresses, first  8 bits represented the network and the remaining 24 bits identified the host. For example, $17.0.0.1$ was the first host on the apple network. Note that first (i.e host address all 0s) and the last addresses (host address all 1s) is never assigned and used for different purposes. The last address is usually used to broadcast messages to all hosts in a subent, while the first address represent a host connected to a network but not yet assigned an IP.\footnote{/31 address are exempt from this convention}
+
+Because we \textbf{underestimated} the number of networks we would need (no one expected that one day, everyone would own multiple IPs and that there would so many networks), original IP addressing (described above) quickly became obsolete - 8 bits were not enough to represent all networks. And so, a new scheme was introduced - \textbf{Class Based Addressing}
+
+\mgraphics{graphics/2023-11-11-10-25-26.png}{Class Based Addressing}
+
+But this wasn't enough, so the scheme was complicated further still, and gave rise to \textbf{CIDR}. The subnest mask $/24$ or in general $/{x}$ identifys how many top order bits are used in the subnet part of an IP. IP addresses in format $a.b.c.d/x$ are known as Classless InterDomain Routing (or CIDR) addresses.\footnote{CIDR addresses are in dominant use now}
+
+\mgraphics{graphics/2023-11-11-10-32-53.png}{Alternate format of representing CIDR addresses}
+
+But this still wasn't enough, and so introducing IP$V6$ addresses.
+@TODO
+
+\subsection{IP Address Ranges}
+Now, we answer two questions:
+\begin{itemize}
+    \item How does a host within a network get assigned an IP address?
+    \item How does a network itself get assigned an IP address?
+\end{itemize}
+
+Let's tackle the first question. A host is either hardcoded an IP by the sys-admin (for eg. in \etc\rc.config for UNIX machines) or through the Dynamic Host Configuration Protocol (DHCP). A DHCP servers typically serves one router and all the subnets attached to that router. 
+
+\mgraphics{graphics/2023-11-11-10-52-40.png}{A simple DHCP interaction}
+
+Ok, now for the second question, how does a network get its subnet address? Well, it gets allocated a portion of its providers ISP's address space.
+\mgraphics{graphics/2023-11-11-10-55-44.png}{ISP dividing its address space for different networks}
+
+Notice that the rest of the internet really only needs the ISP's IP to access each of the 8 networks above. Route/Address Aggregation!
+
+\fwgraphics{graphics/2023-11-11-10-57-17.png}{Route or Address Aggregation}
+
+Its never this organized in the real world. Organizations might jump ship and choose a different ISP, while still keeping their original IP address ranges. This is why the internet forwards packets based on the \textbf{longest prefix match}.
+\mgraphics{graphics/2023-11-11-11-00-38.png}{Longest Prefix Matching}
+Ok, so how do ISPs get their IP address? Well, its a complicated process of going through registrars and so forth.
+
+\mgraphics{graphics/2023-11-11-11-07-35.png}{Regional Internet Registeries}
+
+
+\subsection{Routing}
+IGP vs EGP
+This is the problem that falls into the control-plane of the network layer. Routing algorithms can be clasified into the following.
+% \newpage
+\fwgraphics{graphics/2023-11-11-12-12-07.png}{Classification of routing algorithms}
+
+\subsection{Link State Routing}
+Each router has the link information for every other router. Then just uses Dijikstra's algorithm to determine shortest path from it to every other router.
+
+\subsection{Distance Vector Routing}
+From time to time, each node sends its own distance distance vector estimates to its neighbours. 
+
+
+\subsection{BGP}
+Along with IP, makes up the two most important algorithms in all of computer networking. Its the "glue" that holds internet together. BGP allows a network to advertise its existence to the rest of the internet. It provides an AS
+\begin{itemize}
+    \item a means to obtain network reachability information from neighbouring ASes (eBGP)
+    \item determine routes to networks outside AS based on reachability information and policy
+    \item propogate reachability information to all internal AS routers (iBGP)
+    \item advertise to neighbouring networks destination reachability information, again based on policy
+\end{itemize}
+
+\mgraphics{graphics/2023-12-06-16-46-42.png}{eBGP, iBGP}
+
+\section{Network Address Translation (NAT)}
+We are out of IPv4 addresses. For a few years now. Yet, instead of switching over to IPv6, we play tricks and pretend we have more addresses than we actually do. We can do this becase:
+\begin{itemize}
+    \item Do we really need globally unique IP addresses?
+    \item Other hosts \textit{rarely} initiate a direct connection with you - most connections target servers "out there" in the internet 
+    \item So, maybe several hosts could share a single IP address 
+\end{itemize}
+
+The idea is simple. Hosts on a private network each get assigned an internal IP non-routable address. These hosts are then serviced by a NAT router, whose public IP address is used to reference every host in this network. The NAT router takes care of the mappings by maintaining a forwarding table.
+
+\fwgraphics{graphics/2023-12-13-07-15-48.png}{NAT forwarding table}
+
+But...what if a connection comes from the outside\footnote{known as the NAT traversal problem}, or if the remote host too is behind a NAT (its reply will have the NAT address as the sender) - each of these cases would not match any entry in the forwarding table. We could resolve this issue by manually adding a fixed rule - say if a connection comes to address X at port Y, forward to internal host Z. Another approach is to employ UPnP (Universal Plug and Play). This is a protocol that allows host to communicate to the NAT router what traffic to forward to them\footnote{Nasser Hussein's video on UPnP shows you can example of doing so}.
+
+NAT has been controversial - a network-level device mucking around with IP addresses and port numbers disobeys the layered responsibilities of networking, and a purist might say, let's just bite the bullet and switch to IPv6.
+
+\section{Link Layer}
+Hosts and routers are nodes in the graph that is the internet. The edges connecting these nodes are the "links" we now talk about. These can be wired or wireless or connections over a LAN (switches). Link layer packets are known as frames and encapsulate a datagram. The primary resposibility of the link layer is to transfer a packet from one host (more precisely, interface) to another over a phyical medium. To do so, they also need to manage shared access to a medium - media access control.
+
+There are two broad categories of links:
+\begin{itemize}
+    \item Point-to-point: direct link between two interfaces 
+    \item  Broadcast links: shared between multiple links 
+\end{itemize}
+
+\mgraphics{graphics/2023-12-13-09-20-41.png}{Link layer frame}
+
+The link layer makes use of MAC addresses to identify interfaces. 
+\subsection{MAC vs IP}
+\begin{itemize}
+    \item IP is 32-bit or 128-bit, MAC is 48-bit 
+    \item IP addresses must be unique globally, while MAC must be unique in the network
+    \item MAC addresses are burned into the ROM of the adapater - doesn't change while IP addresses depends on which subnet the host is attached to 
+    \item Notice that MAC addresses share no relationship with another - unlike IP where addresses on the same network share their prefix, this means we cannot use any from longest prefix matching when forwarding frames using MAC addresses 
+\end{itemize}
+
+
+\subsection{Error detection and correction}
+\mgraphics{graphics/2023-12-13-09-21-43.png}{EDC pipeline}
+
+\begin{itemize}
+    \item Single bit parity check: add a parity bit to maintain even parity
+    \item 2-d partiy check: add a parity bit to each row, column and an overall parity bit, can correct single bit errors and detect upto 3-bit errors
+    \item Checksums, such as the internet checksum
+    \item Cyclic redundancy check (CRC): used to detect burst errors, which are rather common in practice... 
+        \begin{itemize}
+            \item parameterized by constants G, r - where G is the generator, an arbitrary bit pattern and r+1 is the length of the generator 
+            \item Some generators are better than others - given in the CRC standard 
+            \item When the sender wants to send D, they choose r CRC bits, R, such that <D,R> is exactly divisible by G modulo 2 
+            \item The receiver knows G, divides <D,R> by G, if non-zero remainder an error has been detected
+            \item The computation of R and derivation of G can be implmented quite quickly in hardware 
+        \end{itemize}
+\end{itemize}
+
+\subsection{Access control and ARP}
+Half-duplex links are not uncommon at the link layer. If a link is half-duplex, how does a potential sender know when the link is busy? They listen. Listening is also used to detect "collision" (when two or more senders try to use the link at once). If a collision is detected or the link is busy, the senders wait a random amount of time before trying again. This kind of a protocol for access control is referred to as CSMA (Carrier sense multiple access), and it matches our human conventions for conversation. CSMA/CD adds collision detection and aborts sending if a collision is detected (again matching the human convention of conversation). The wait time before trying again is usually "binary exponential backoff" - where we choose a random number in the range $1-2^n$ where $n$ is the number of attempts to send that have failed due the link being busy or a collision.
+
+Another approach to access control is "turn-based" access control where the senders take turn using the link and pass their turn if they don't need to use the link at the time. This type of a system could either be implemented in a centralized or decentralized fashion. In the centralized control version, the single control node polls every sender to see if they want a turn - there is a way for senders to signal that they would want to use the link. This is used in WiFi connections. In the decentralized version, nodes pass around a token and only the sender with the token may use the link. This introduces extra complexity - what happens if the node with the token breaks. Or what if a new token is generated even though the old one is still valid?
+
+In general, CSMA/CD will use the network resources efficiently when there is just one host sending data - there will be no collisions and the host can send data at full speed. In the case with many senders, turn-based access control is a lot more efficient - there will rarely be a sender who wouldn't have data to send on their turn.
+
+Now let's talk about switches - switches provide a full duplex connection between nodes in a LAN and also provide broadcast functionality. A switch contains a forwarding table with 3 columns - MAC address, interface, time. 
+
+\mgraphics{graphics/2023-12-13-18-46-34.png}{Switch forwarding table}
+
+\begin{itemize}
+    \item Each time a fram is received on interface I, the switch looks at both the source and destination MAC addresses - if the source address appears in the table, update the interface the time, else add an entry with the MAC address, interface and time 
+    \item That was the "learning" phase. Now we need to forward the frame - if the destination MAC address doesn't appear in the table, we forward to every interface except the one on which we received the frame. 
+    \item If the destination MAC address has an entry in the table and its associated interface is I, discard the frame, else send it to I'
+    \item If the destination address is not in the forwarding table, broadcast (except to the interface it just came on)
+    \item In addition, we never put the broadcast address - $FF-FF-FF-FF-FF-FF$ in the table and delete entries whose time is too long ago ("too long ago" is defined by the admin)
+    \item Again, we need to also check the CRC to ensure the frame has not been corrupted. Notice that in reality, interfaces are fixed and all that really needs to be updated is the timestamp.
+\end{itemize}
+
+
+
+Now how do you get the destination host's MAC address? Notice that a node knows it own MAC address, and can query for the destination's IP using DNS. So, given the desitination IP, we can the Address Resolution Protocol to get the MAC. There are two cases to consider:
+\begin{enumerate}
+    \item The nodes are on the same LAN: in which case and ARP query is broadcast and MAC addresses are exchanged 
+    \item The nodes are on different subnets: the sender can check the destinations IPs prefix to determine if its on the same subnet or not. If it is not, it just forwards the frame to its default gateway router (notice it knows the default gateways IP via DHCP and its MAC via ARP). The router then creates a new frame forwarding it to the next router and so on until it reaches the destination subnet and eventually the destination node.
+\end{enumerate}
+
+\subsection{Physical and link layer issues}
+@TODO
+
+\section{Security}
+The principles of security in networking:
+\begin{itemize}
+    \item Confidentiality: only relevant parties should be able to understand the message 
+    \item Authentication: parties must know if the data is being sent by a trust source 
+    \item Message integrity: data should not be altered 
+    \item Access and availability: services must be accessible and available to users 
+\end{itemize}
+
+\mgraphics{graphics/2023-12-13-20-34-49.png}{Network secuirty terminology; Alice, Bob and Trudy}
+
+What can Trudy do?
+\begin{itemize}
+    \item Eavesdrop
+    \item Alter messages
+    \item Impersonate 
+    \item Hijack 
+    \item DoS 
+\end{itemize}
+
+In comes encryption. How can Trudy break an encryption scheme?
+\begin{itemize}
+    \item Cipher-text only attack: Trudy only has access to the cipher text and either brute forces or does a statistical analysis
+    \item Known-plaintext attack: Trudy has some cipher-text with its plaintext and can try to extrapolate from their 
+    \item Chosen-plaintext attack: Trudy can encrypt any plaintext, i.e has access to encryption key and can try to work her way backward
+\end{itemize}
 
 
 

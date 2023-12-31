@@ -73,7 +73,6 @@
 \begin{marginfigure}%
     \includegraphics[width=\linewidth]{#1}
     \caption{#2}
-    \label{fig:marginfig}
   \end{marginfigure}}
 \begin{document}
 
@@ -81,7 +80,6 @@
 \begin{figure}%
     \includegraphics{#1}
     \caption{#2}
-    \label{fig:marginfig}
     \setfloatalignment{b}
   \end{figure}}
 \begin{document}
@@ -716,6 +714,8 @@ Lazy reduction! Don't evaluate named expressions early on.
     
 \end{minted}
 
+Along the way, we discovered an important property:  naïve substitution is not enough! In particular, a program with free identifiers, which should signal an error, might produce a value result if we implement the language using naive substitution.  This leads us to two solutions:  either ban free identifiers or use capture-avoiding substitution.  For now we go with the latter, though languages like Haskell go with the former.
+
 \marginnote{Lazy evaluator, cons should not evaluate its value - 2 papers that came out in the same year, haskell is an example of a pure, non-strict programming language}
 
 We briefly talked about why someone might allow programs that we *know* could produce an error. There is a \texbf{robustness/correctness tradeoff} to consider, which has affected HTML's supremacy over XHTML, and may have motivated JavaScript's "keep-on-truckin'" behaviour in the face of undefined : better for some code to limp along half-working than to simply crash the moment something goes wrong.
@@ -1125,19 +1125,66 @@ Hygienic macros
 you need to macros to handle effects and not functions since racket is call-by-value and so it run the argument before passing it into the function -  no way to perform exception handling
 non-strict languages dont have this issue - which is why haskell doesn't have a ood macro system
 
-assignment in python is like letrec
+assignment in python is like letrec 
 
 @TODO
 
 
 \section{Lecture 24: Effect Abstractions 3 - Threaded Accumulators and Layering Multiple Effects}
+Based on the above post, I am guessing that you are talking about Problem 1 from Assignment 5?  If so, then maybe the following can help.
+We have studied several different effect abstractions, and combinations of them:
+
+Exception/Canonical - when you might produce a value or raze an exception.  This is like having an "error code" like when in C or Java someone produces a null value, but here you have no choice but to handle the error case (which is a good thing).
+;; Computation is one of:
+;; - A
+;; - B
+Where A is your usual value, and B is your "exceptional case"
+
+Threaded Accumulator/State-passing - when you have a threaded accumulator in your code, like in the tree form score-a-lot.  We also used threaded accumulators to thread the store in Hannah, and used match-let to separate the return value from the updated accumulator.
+Computation  is Acc -> (list Value Acc)
+where Value is your normal return value and Acc is the threaded accumulator
+ 
+No Effect (i.e. NoFX) - when you don't actually do anything with effects.  But you can still format an interpreter this way so that it's easier to add effects later (as we did in tutorial 7).
+Computation is Value  
+
+Accumulator/Environment - when you have a normal (i.e. non-threaded) accumulator.  We used this in tutorial 7 to switch between an environment-passing interpreter (since an environment is just an accumulator) and substitution (using NoFX).  
+Computation is Acc -> Value 
+
+Stream/Backtracking - we used this in Lola to implement backtracking
+Computation is (streamof Value) 
+
+Continuation - we used this in MCA to support first-class continuations.  It can also help us make our program tail-recursive (by adding this effect everywhere)
+Computation is Kont -> Value
+Where Kont is the type of a continuation (which is a procedural representation of an accumulator) and Value is the result.  
+
+We also blended accumulators.  Boxtel combines the threaded accumulator effect with the exception effect.  Tomax combines the threaded accumulator effect with the backtracking effect.
+
+Ok, so that's all the effects we have studied.  Now, for your mission, the first thing you need to think is what effect among the above is the program already using.  That should help you narrow down what should be considered.  You should be able to figure this out just by reading the interpreter, especially the main interp functions, but also the helpers it calls, and how it calls them.  Compare that to other interpreters you've seen.  Once you know which effect(s) is(are) in play, you can think about how to abstract those details.  First thing you should do is figure out what
+;; Computation is ...
+should be.  Nearly everything follows from this type signature.  You can use it to guide your design.
+I don't necessarily recommend trying to systematically derive the effect like I did for state in class.  That was meant to be more pedagogical about how state works.  It might work for some, but it might be asking too much of yourself.  
 
 
-\mgraphics{graphics/2023-11-08-12-33-17.png}{}
+\mgraphics{graphics/2023-11-08-12-33-17.png}{Creator of Chez Scheme - used on Cisco routers back in the day becasue C was too slow}
 
 
 The book "Beautiful Code"
 Scheme Programming Language by Kent
+
+\section{Lecture 25: Generalized Backtracking via Streams}
+Prommises in Racket  
+The delay construct is used together with the procedure force to implement lazy evaluation or call by need. (delay <expression>) returns an object called a promise which at some point in the future may be asked (by the force procedure) to evaluate <expression>, and deliver the resulting value. The effect of <expression> returning multiple values is unspecified.
+
+\fwgraphics{graphics/2023-11-21-16-10-03.png}{Streams}
+
+@TODO Until Lecture 30
+
+\section{Lecture 30: Inductive Definitions and Well-Formedness}
+\mgraphics{graphics/2023-12-10-12-25-11.png}{The Cousots! Seminal work in static analysis}
+\marginnote{Princples of Abstract Interpretation - By Patrick Cousot}
+Invariants - the compiler relies on the invariant that your input is a valid program. If that's not the case, it can really do whatever it likes and that is NOT a compiler error = examples of this are seen on the C compiler github issues page where issues are often shut down with "yeah so? that exactly what it is supposed to do". 
+
+"Parse, Don't check!" -  Alexsis King. Defining a function to check if WAE is closed and then deciding to call the interpreter works, but again its a form of checking. Instead, it would be nice to find a way of parsing that encapsulates closed-ness. Inductive definitions! (which Ron describes as BNFs on steroids).
 
 
 

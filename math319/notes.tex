@@ -436,7 +436,19 @@ But it does take closed intervals to closed intervals.
   If $f$ is differentiable on $\DD$, then $f$ is continuous on $\DD$. At the same time, the derivative function $f'$ need not be continuous on $\DD$.
 \end{lemma}
 \begin{proof}
-  @Homework
+  Since $f$ is differentiable at $x=c$, it follows that 
+  \begin{align}
+    f(x) = f(c) + \phi(x)(x-c)
+  \end{align}
+  for some function $\phi(x)$ such that 
+  $$\lim_{x\to c} \phi(x) = \phi(c) = f'(c)$$
+  Since $\phi(x)$ is continuous at $x=c$, we can take the limit as $x \to c$ of both sides of $(1)$ to get 
+  \begin{align*}
+    \lim_{x\to c}f(x) &= f(c) + \lim_{x\to c}\phi(x)(x-c) \\
+    &= f(c) + f'(c)\cdot 0 \\
+    &= f(c)
+  \end{align*}
+  Therefore, $f$ is continuous at $x=c$.
 \end{proof}
 
 \begin{definition}
@@ -453,26 +465,26 @@ But it does take closed intervals to closed intervals.
 
 \begin{lemma}
   Let $f$ be differentiable at $c$ and $T$ be the tangent line at $c$. Then, 
-  $$\lim{x\to c}\frac{f(x) - T(c)}{x-c} = 0$$
+  $$\lim_{x\to c}\frac{f(x) - T(c)}{x-c} = 0$$
   Further, $T$ is the unique linear function with this property.
 \end{lemma}
 
 \begin{proof}
   Let $f, T$ be as stated. Then 
   $$\frac{f(x) - T(x)}{x-c} = \frac{f(x) - (f(c)+(x-c)\cdot f'(c))}{x-c} = \frac{f(x) - f(c)}{x-c}-f'(c)$$
-  So limit goes to 0 as required.
+  So limit goes to $0$ as required. Really just needed to unwrap the defintions.
   Uniqueness = @Homework.
 \end{proof}
 
-To make proofs of chain rule, etc work, it helps to be able to say 
-$f(x)$ "look like" $T(x)$ at $x=c$
+To make proofs of chain rule, etc work, it helps to be able to say that
+$f(x)$ "looks like" $T(x)$ at $x=c$
 $$f(x) = f(c) + (x-c)\phi(x)$$
 
 $\phi(x)$ looks like $f'(c)$ and 
 $$\lim_{x\to c}\phi(x) = f'(c)$$
 
 \begin{theorem}
-  If $g$ is differentiable at $x=c$ then there exists $\phi$ such that $g(x) - g(c) = \phi(x)(x-c)$ and $\phi$ is continuous with $\lim_{x\to c}\phi(x)=\phi(c) = g'(c)$. \\
+  If $g$ is differentiable at $x=c$ then there exists $\phi$ such that $g(x) - g(c) = \phi(x)(x-c)$ and $\phi$ is continuous (at $c$) with $\lim_{x\to c}\phi(x)=\phi(c) = g'(c)$. \\
   The converse also holds. If you can find such a $\phi$ then $g$ is differentiable at $c$ with $g'(c)=\phi(c)$.
 \end{theorem}
 \begin{proof}
@@ -482,14 +494,15 @@ $$\lim_{x\to c}\phi(x) = f'(c)$$
     \frac{g(x)-g(c)}{x-c} & x\neq c \\
   \end{cases}
   $$
+  And so $g(x) = g(c) + \phi(x) \cdot (x-c)$. 
   Since $g$ is differentiable at $c$, we know 
   $$\lim_{x\to c}\phi(x) = \lim_{x\to c}\frac{g(x)-g(c)}{x-c}=g'(c)$$
   So $\phi$ is continuous at $x=c$.
 
-  Conversely, if such a continuous $\phi$ exists then $$\phi(x) = \frac{g(x)-g(c)}{x-c}$$ So $\lim_{x\to c}\phi(x)$ exists since $\phi$ is continuous at $c$ and so $\phi(c) = g'(c)$ and so $g$ is differntiable at $x=c$.
+  Conversely, if such a continuous $\phi$ exists then $$\phi(x) = \frac{g(x)-g(c)}{x-c}$$ So $\lim_{x\to c}\phi(x)$ exists since $\phi$ is continuous at $c$ and so the limit $$\lim_{x \to c}\frac{g(x) - g(c)}{x-c}$$ exists and so $g$ is differntiable at $x=c$.
 \end{proof}
 
-\subsection{Proof of the Product Rule!}
+\subsection{Proof of the Product Rule}
 \begin{proof}
   Assume $f,g$ is differentiable at $x=c$, then by the theorem above we have that
   \begin{align*}
@@ -522,12 +535,11 @@ $$\lim_{x\to c}\phi(x) = f'(c)$$
     \frac{g(f(x)) - g(f(c))}{x-c} &= \frac{\gamma(f(x))(f(x) - f(c))}{x-c}
   \end{align*}
   Which gives $$\lim_{x\to c} = \frac{d}{dx}(g(f(x)))|_{x=c} = \gamma(f(c))\cdot f'(c) = g'(f(c))f'(c)$$
-\end{proof}
+\end{proof} \marginnote{These proofs are really just expanding the definition and substituting where appropriate}
 
-\begin{theorem}
-  Arithmetic of derivatives \\
-\end{theorem}
-\begin{proof}
+The derivative need \textbf{not} be continuous.
+
+\begin{example}
   Consider $$g(x) = \begin{cases}
     x^2sin(1/x) & x \neq 0 \\
     0 & x = 0 \\
@@ -542,25 +554,36 @@ $$\lim_{x\to c}\phi(x) = f'(c)$$
   \end{cases}
   $$
   This is not continuous at $x=0$ so $g$ is differentiable everywhere but its derivative is not continuous.
-\end{proof}
+\end{example}
 
-Now consider 
-$$f(x) = \begin{cases}
-  x & x\in \QQ \\
-  0 & x \in \RR - \QQ \\
-\end{cases}
-$$
-is continuous at 0 but nowhere else. \\
-$$g(x) = \begin{cases}
-  x^2 & x \in \QQ \\
-  0 & \text{elsewhere}
-\end{cases}
-$$
-is differentiable at $0$ but nowhere else.
+The following example shows functions which are differentiable and continous at exactly one point.
+\begin{example}
+  Consider 
+  $$f(x) = \begin{cases}
+    x & x\in \QQ \\
+    0 & x \in \RR - \QQ \\
+  \end{cases}
+  $$
+  is continuous at $0$ but nowhere else. \\
+
+  $$g(x) = xf(x) = \begin{cases}
+    x^2 & x \in \QQ \\
+    0 & x\in \RR - \QQ
+  \end{cases}
+  $$
+  is differentiable at $0$ but nowhere else.
 \begin{proof}
-  $$g'(0) = \lim_{x\to 0} \frac{g(x)-g(0)}{x} = \lim_{x\to 0}\frac{g(x)}{x} = \lim_{x\to 0}f(x)$$
-  @TODO
+  Now, for all $\epsilon > 0$, set $\delta = \epsilon$. Then for all $x \in (-\delta, \delta)$, we have that 
+  $$|f(x) - f(0)| = |f(x)| \leq |x| < \delta = \epsilon $$
+  Similarly, we have that
+  $$ g'(x) = \lim_{x \to 0}\frac{g(x) - g(c)}{x-c} = \frac{g(x)}{x} = f(x) = 0$$
+
+  Now we will show that ever other $c$, we have that $f(x)$ is dis-continuous. Consider $c > 0$, $\epsilon = c/2$ and choose any $\delta > 0$ 
+  \begin{itemize}
+    \item \underline{$c$ is rational}. 
+  \end{itemize}
 \end{proof}
+\end{example}
 
 \section{Increasing, Decreasing and Derivative}
 \addtocounter{section}{1}
@@ -579,6 +602,42 @@ is differentiable at $0$ but nowhere else.
   \end{itemize}
   Similar statement for $f'(c) < 0$
 \end{lemma}
+
+@TODO so much yaar
+
+
+\section{Metric and Metric Spaces}
+What does "distance" have to satisfy?
+\begin{itemize}
+  \item Distance must be a non-negative real number, $\rho(x,y) \geq 0$
+  \item $\rho(x,x) = 0$
+  \item $x \neq y \implies \rho(x,y) \neq 0$
+  \item $\rho(x,y) = \rho(y,x)$
+\end{itemize}
+Implicit in the notion of distance is the idea of "minimality". That is, when we refer to the distance between points, we mean the "minimum" distance between two points.
+
+$$ \not \exists z \text{ such that } \rho(x,y) > \rho(x,z) + \rho(z,y)$$
+which is precisely the triangle inequality
+$$\forall z \; \rho(x,y) < \rho(x,z) + \rho(z,y)$$
+
+\begin{definition}
+  Let $A$ be a set and let $a,b,c \in A$. A \textbf{metric} on $A$ is a function $\rho: A \times A \to \RR$ that satisfies 
+  \begin{itemize}
+    \item positive definite: $\rho(a,b) \geq 0$ and $\rho(a,b) = 0 \iff a = b$ 
+    \item symmetric: $\rho(a,b) = \rho(b,a)$ 
+    \item triangle inequality: $\rho(a,b) \leq \rho(a,c) + \rho(c,b)$
+  \end{itemize}
+\end{definition}
+
+\begin{definition}
+  A \textbf{metric space} $M = (X, \rho)$ is a set along with a metric for that set.
+\end{definition}
+
+\begin{definition}
+  Let $Y \subseteq X$, then we have that a \bold{metric subspace} is $(Y,\rho')$ where $\rho'$ is the restriction of $\rho$ to $Y$. This notation is often abused and we just say that $(Y,\rho)$ is a metric subspace (we drop the prime on $\rho$).
+\end{definition}
+
+
 
 
 

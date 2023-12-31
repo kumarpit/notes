@@ -78,6 +78,7 @@
 \newtheorem{warning}{Warning}[section]
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{example}{Example}[section]
+\newtheorem{remark}{Remark}[section]
 
 \newcommand{\bold}[1]{\textbf{#1}}% bold face
 
@@ -590,6 +591,7 @@ For any given matrix $G$, first transform the matrix to reduced row-echelon form
 \mgraphics{graphics/2023-10-26-20-12-38.png}{An example of transforming $G$ to the standard form}
 
 \section{Encoding and Decoding with a Linear Code}
+\addtocounter{section}{1}
 Every vector in a $[n,k]-$code can be written as 
 $$a_1\vec{v_1} + \dots + a_k\vec{v_k}$$
 To encode linear codes, we use the codeword 
@@ -651,18 +653,293 @@ An intuition: We know that, for linear codes, $d(x,y) = w(x-y)$. For a vector in
 Now, this simplifies decoding greatly. We no longer need to compare each digit to find the closest neighbour. But matrices can be get pretty big too. It can be tedious to find $\vec{y}$ in a large enough matrix. We tackle this problem next.
 
 \section{Dual Code, Parity-Check Matrix and Syndrome Decoding}
-@TODO
-% \marginnote{Golay codes most important paper written in coding theory history. The Voyager used the G23 code}
+\addtocounter{section}{1}
+The parity-check matrix, just like the generator matrix, provides a way for us to specify a linear code. 
+
+\begin{definition}
+    The \textit{inner product} of two vectors $u \cdot v$ where $u = u_1u_2\dots u_n $ and $v = v_1v_2\dots v_n$ in $F_q^n$ is the scalar defined by 
+    $$ u \cdot v = u_1v_1 + u_2v_2 + \cdots + u_nv_n $$
+
+    If $u \cdot v = 0$, then we say that $u,v$ are \textbf{orthogonal}.
+\end{definition}
+
+\begin{definition}
+    We define the \textbf{dual code} of $C \subseteq F_q^n$ to be 
+    $$ C^\perp = \{ \vec{x} \in F_q^n \; | \; \vec{x} \cdot \vec{w} = 0 \text{ for all } \vec{w} \in C \} $$
+\end{definition}
 
 
+\begin{theorem}
+    Let $C \subseteq F_q^n $. Then $dim(C^\perp) = n - dim(C)$.
+\end{theorem}
+\begin{proof}
+    @TODO
+\end{proof}
+
+\begin{definition}
+    A \textit{parity check matrix $H$} for an $[n,k]-$code $C$ is a generator matrix of $C^\perp$.
+\end{definition}
+
+\fwgraphics{graphics/2023-12-04-13-45-00.png}{Computing the parity check matrix given the generator matrix for $C$}
+
+The parity check matrix satisfies $GH^T = 0$ ($0$ here refers to the all-zero matrix). This essentially means that every row of $G$ is orthogonal to every row of the parity check matrix, which in turn implies that every vector in $C$ is orthogonal to every vector in $C^\perp$, consistent with our definition above. 
+
+\mgraphics{graphics/2023-12-05-00-22-00.png}{Examples}
+
+\subsection{Syndrome Decoding}
+\mgraphics{graphics/2023-12-05-00-27-49.png}{Visualizing cosets}
+Now, we covered decoding linear codes in the previous section using the standard array. However, we realized that finding the vector $\vec{y}$ in this table can be really, really slow when the tables get big. There is also the concern of memory - do we really need to have a table with every vector in our space 
+($q^n$ entries) to decode a linear code? No. 
+
+Now we know that  
+$$ \vec{x} \in C \iff H \cdot \vec{x} = \vec{0} \iff \vec{x} \cdot  H^t = 0 $$
+
+\begin{theorem}
+    $\vec{y}, \vec{z}$ lie in the same coset $\iff \vec{y} \cdot H^t = \vec{z} \cdot H^t $
+\end{theorem}
+\begin{proof}
+    \begin{align*}
+        \vec{y}, \vec{z} \text{ in the same coset } &\iff (\vec{y} - \vec{z}) \in C \\
+        & \iff (\vec{y} - \vec{z})\cdot H^t = 0 \\
+        & \iff \vec{y} \cdot H^t = \vec{z} \cdot H^t
+    \end{align*}
+\end{proof}
+
+\begin{definition}
+    The \textbf{syndrome} of $\vec{y}$ is $y \cdot H^t \in F_q^{n-k}$
+\end{definition}
+
+Now we can use the syndrome of $\vec{y}$ to quickly find the coset that it belongs to.
+
+\fwgraphics{graphics/2023-12-05-00-40-20.png}{The extended array}
+
+\section{Hamming Codes}
+\addtocounter{section}{1}
+The \textit{Hamming codes} are a special family of single-error-correcting codes that are easy to encode and decode. They are linear codes and can be defined over any finite field $GF(q)$ but we restrict our study in this section binary Hamming codes.
+
+\begin{definition}
+    Let $r$ be a positive integer and let $H$ be a $r \times 2^r-1$ matrix whose columns are the distinct non-zero vectors in $F_2^r$. The code having $H$ as its parity-check matrix is called a binary Hamming code and is denoted by $Ham(r,2)$.
+
+    Notice that $Ham(r,2)$ has length $n = 2^r-1$ and dimension $k = n-r$. Also, since the columns of $H$ may be taken in any order, the code $Ham(r,2)$ gives one of a number of equivalent codes.
+\end{definition}
+
+\begin{theorem}
+    The distance of $Ham(r,2)$ is $3$.
+\end{theorem}
+\begin{proof}
+    @TODO
+\end{proof}
+
+\begin{theorem}
+    The binary Hamming code is perfect. 
+\end{theorem}
+\begin{proof}
+    Check sphere packing bound.
+\end{proof}
+
+\subsection{Decoding with a binary Hamming code}
+Since $Ham(r,2)$ is a perfect, single-error-correcting code (i.e distance $3$), the coset leaders are precisely the $2^r(=n+1)$ vectors of $F_2^r$ of weight $\leq 1$. This has a very important implication. Notice that the syndrome for the vector $(0\cdots 10 \cdots 0)$ (i.e the vector with $1$ in the $jth$ position) is $(0\cdots 10 \cdots 0)H^t$ which is just the transpose of the $jth$ column of $H$. Hence, if the columns of $H$ are arranged in increasing order, the syndrome of $\vec{y} \in Ham(r,2)$ is just the error position.
+
+\mgraphics{graphics/2023-12-05-02-09-03.png}{Decoding using the Hamming code}
+
+\subsection{Non-binary Hamming Codes}
+\begin{theorem}
+    Let $H_1, \dots, H_n$ be the columns of $H$. Then $d(C)$ is such that 
+    \begin{enumerate}
+        \item There exists $d$ linearly dependent columns of $H$.
+        \item Any $d-1$ columns of $H$ are linearly independent. 
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    Suppose $\vec{w}$ is a codeword of weight $l$, i.e $\vec{w} = (0,\dots, c_1, \dots, c_2, \dots, c_n)$. Then we have that 
+    $$
+        \vec{w} \cdot H^t = \vec{0} 
+        \iff c_1H_1 + c_2H_2 + \dots + c_nH_n = \vec{0} $$
+    If there existed $d-1$ linearly dependent columns, then we would arrive at a contradiction since that would imply the existence of a vector $\vec{y}$ that is of weight $< d(C)$ and is in $C$.
+\end{proof}
+
+And so, for a linear code $C$, $d(C)$ represents the minimum number of columns of the corresponding parity check matrix that are linearly dependent $\iff$ any $d-1$ columns are linearly independent.
+
+\mgraphics{graphics/2023-12-05-02-21-34.png}{Example}
+
+\subsection{q-ary Hamming Codes}
+With the theorem we just covered, it becomes easy to define the $H$ matrix for a $q-ary$ Hamming code. We know that we need every pair of columns in our $H$ matrix to be linearly independent. Given this condition, we now try to construct a code with the largest possible $n$ (number of columns = length of our codeword). 
+
+Notice that any vector in $F_q^n$ has $q-1$ scalar mutliples. There are $q^r-1$ non-zero vectors, and so we get $\frac{q^r-1}{q-1}$ equivalence classes. And so, if we choose one vector from each of these equivalence classes, we get the largest possible set of vectors such that any two are linearly independent. This code is called a $q-ary$ Hamming code and is denoted by $Ham(r,q)$.
+
+\begin{theorem}
+    A $q-ary$ Hamming code $Ham(r,q)$ is perfect.
+\end{theorem}
+\begin{proof}
+    
+\end{proof}
+
+The decoding scheme of q-ary Hamming codes is similar to binary Hamming codes.
 
 
+\section{Cyclic Codes}
+
+\begin{definition}
+    A code $C$ is cyclic when 
+    \begin{enumerate}
+        \item it is linear 
+        \item any cyclic shift of a codeword is also a codeword i.e whenever $a_0a_1\dots a_n$ is in $C$, then so is $a_na_0a_1\dots a_{n-1}$ and so on
+    \end{enumerate}
+\end{definition}
+
+Just like we used linear algebra to impose a structure on linear codes, we use polynomials to represent and study cyclic codes. We will see why this is useful in the following section.
+
+Let $C$ be a cyclic code. Define a codeword $w = (a_0, a_1, \dots, a_{n-1})$ in the $C$ as 
+$$ a_0 + a_1x + \dots + a_{n-1}x^{n-1} $$
+a polynomial in $F_q[x]$. If we multiply this polynomial by $x$ we get 
+$$ xa_0 + a_1x^2 + \dots + a_{n-1}x^n$$
+Notice that this polynomial modulo $x^n - 1$ is 
+$$ xa_0 + a_1x^2 + \dots + a_{n-1} $$
+which, as a codeword, is $(a_{n-1}, a_0, \dots a_{n-2})$ a cyclic shift!
+Just as $\ZZ$ is a (infinite) ring while $\ZZ_m$ is a finite ring, 
+$F_q[x]$ is the ring of polynomials while $F_q[x] / x^n - 1$ is a finite ring of polynomials. Now we can refine our definition of cyclic codes.
+
+\begin{definition}
+    $F_q[x]$ is the ring of polynomials with coefficients belonging to the field $F_q[x]$. The ring $F_q[x] / f(x)$ consists of all the polynomial of degree less than $f(x)$. Notice that, if the degree of $f(x) = n$, then there are $q^n$ such polynomials.
+\end{definition}
 
 
+\begin{definition}
+    A cyclice code $C$ is 
+    $$ C \subseteq  \frac{F_q[x]}{x^n - 1} $$
+\end{definition}
+
+\begin{definition}
+    A polynomial of degree $m$ is called monic when the $x^m$ has coefficient $a_m = 1$.
+\end{definition}
+
+Addition, multiplication, scalar multiplication and division (remember long division for polynomials?) are carried out as usual for $F_q[x]$, but remember that now all coefficients are in the ring $F_q$.
 
 
+\begin{definition}
+    The greatest common divisor of $f(x)$ and $g(x)$ is defined as the monic polynomial $h(x)$ of max degree that divides both $f,g$. Notice that such a monic polynomial always exists since $F_q$ is a field, hence the inverse of $a_m$ (coeffecient of the $x^m$ term) has an inverse.
+\end{definition}
+
+\begin{remark}
+    $\ZZ$, $F_q[x]$ are known as Euclidean rings because the Euclidean algorithm works in these spaces.
+\end{remark}
+
+We cover the general procedure of finding the $gcd$ of two polynomials in the ring $F_q[x]$. Say you have two polynomials $f,g \in F_q[x]$. Say $deg(f) < deg(g)$.
+
+\begin{enumerate}
+    \item Divide $f$ by $g$ using long division. Note the remainder $r$ and the quotient $q$. 
+    \item By the Euclidean algorithm, we have $$gcd(f,g) = gcd(f - q \cdot g, g) = gcd(r,g) $$
+    \item Repeat this procedure until you get the expression of the form $$ gcd(c, k) = c$$ where $c$ is some constant and $k$ is some polynomial.
+\end{enumerate}
+
+Recall how we found inverses of elements in the field $F_q$ using the Euclidean algorithm. Now that we know how to perform the Euclidean algorithm in the ring $F_q[x]$, we can use that to find inverses in it... wait, its a ring, inverses are not guranteed to exist. Hmm, does a field over polynomials exist? We cover this next.
+
+\begin{theorem}
+    $\alpha$ is a root of a polynomial $f(x)$ $\iff$ $(x-\alpha)$ divides $f(x)$ $\iff f(\alpha) = 0$.
+\end{theorem}
+
+\begin{theorem}
+    If $deg(f) = n$ then $f$ can have at most $n$ roots. 
+\end{theorem}
+
+\begin{proof}
+    Because you can only have $n$ factors of the form $(x-\alpha)$, since its degree $n$.
+\end{proof}
+
+Next is probably my favorite result of working in fields.
+
+\begin{remark}
+    If we are working in $F_q$ (i.e the field $GF(q)$), then we have that 
+    $$ (a+b)^p = a^p + b^p $$ \marginnote{Isn't this beautiful?}
+\end{remark}
+
+Alright, now back to defining the \textit{field} of polynomials. Notice that when considering the ring of integers $\ZZ_k$ where $k \in \ZZ$, we only got fields when $k$ was a prime number. With polynomials you get a symmetric result.
+ 
+
+\begin{definition}
+We say that the ring of polynomials $F_q[x] / g(x)$ is a field when  
+    $g(x)$ is \bold{irreducible}. Notice that $F_q[x] / g(x)$ and $F_q[x] / f(x)$ where $f$ is reducible and of the same degree as $g$ have the same cardinality - they both contain all polynomials of degree less than $f$ (or, equivalently, $g$)
+\end{definition}
+
+Irreduciblility has a very natural definition. 
+
+\begin{definition}
+    We say that a polynomial $g$ is \underline{irreducible} when it is not a product of smaller degree polynommials. Notice that, if $f$ is irreducible, then so is $c \cdot f$ for $c \neq 0$. Therefore, it is convention to state irreducible polynomials as monic (this is always possible in $F_q[x]$ by the field properties of $F_q$). 
+\end{definition}
+
+\begin{example}
+    Consider the polynomial $x^3 + x + 1$ in $\ZZ_2[x]$. Is it reducible? Well, if it were to be reducible, there would be one linear factor and one quadratic factor or $3$ linear factors. Since we are in $\ZZ_2$, we check if $0,1$ are roots. 
+    \begin{align*}
+        0 + 0 + 1 &= 1 \\
+        1 + 1 + 1 &\equiv 1 
+    \end{align*}
+    Hence, this polynomial has no linear factors and, by our analysis, is irreducible.
+\end{example}
+
+Recall the fundamental theorem of arithmetic - just like every integer can be stated as a product of primes, every polynomial can be stated as a product of irreducible polynomials.
+
+\begin{remark}
+    Any two fields with the same order are isomorphic. 
+\end{remark}
+
+\begin{definition}
+    Every \textit{field} has a primitive element.
+\end{definition}
 
 
+Alright, having a rough idea of polynomial rings and fields, let's see how we can use them to make it easier to work with cyclic codes.
+
+\begin{definition}
+    Just as linear codes are subspaces of $F_q^n$, all cyclic codes are subspaces of the space $R_n$ where $$ R_n = F_q[x] / (x^n - 1) $$
+    Notice that the length our codewords is $n$.
+    We have 
+    $$ R_n = F_q[x] / (x^n-1) = \{a_0 + a_1x + \dots + a_{n-1}x^{n-1} \} $$
+    where each $a_i \in F_q$.
+
+    Also notice that $R_n$ is isomorphic to $F_q^n$.
+\end{definition}
+
+\begin{theorem}
+    A code $C$ in $R_n$ is cyclic if and only if $C$ satisfies the following two conditions
+    \begin{enumerate}
+        \item $a(x), b(x) \in C \implies a(x) + b(x) \in C$ (closed under addition)
+        \item $a(x) \in C$ and $r(x) \in R_n \implies r(x)a(x) \in C$ (closed under multiplication, but \underline{only} for elements in $R_n$\footnote{In ring theory term, we are saying that cyclic codes are precisely the ideals of the ring $R_n$})
+    \end{enumerate}
+
+
+\end{theorem}
+
+
+Consider the set $\langle f(x) \rangle$ defined as 
+$$ \langle f(x) \rangle  = \{ r(x)f(x) | r(x) \in R_n \} $$
+The set $\langle f(x) \rangle$ is a cyclic code! $f(x)$ is called the \bold{generating polynomial} of this code. \bold{Any} cyclic code can be generated by some polynomial.\footnote{In ring theory terminology, this says that every ideal of $R_n$ is a principal ideal}
+
+\begin{theorem}
+    Let $C$ be a non-zero cyclic code in $R_n$. Then we have that:
+    \begin{enumerate}
+        \item there exists a unique monic polynomial $g(x)$ of smallest degree in $C$ 
+        \item $C = \langle g(x) \rangle$
+        \item $g(x)$ is a factor of $x^n-1$
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+    In a cyclic code, the monic polynomial of least degree ($g(x)$ given above) is called the generator polynomial. 
+\end{theorem}
+
+Notice that by the theroems above, we can find all cyclic codes of arbitrary length.
+
+\begin{example}
+    Let's say that you want to find all the cyclic codes of length $3$ in $F_2[x]$. To do so, we need to find as many distinct generator polynomials as we can. Notice that, since the generator polynomial divides $x^3-1$ and is irreducible, all we need to do is find the factorization of $x^3-1$ in terms of irreducibles. The number of distinct factors is the maximum number of cyclic codes of length $3$.
+\end{example}
+
+\begin{theorem}
+    Suppose $  C$ is a cyclic code with generator polynomial 
+    $$g(x) = g_0 + g_1x + \dots + g_rx^r $$
+    of degree $r$. Then, we can define the generator matrix of $C$ to be 
+    \fwgraphics{graphics/2023-12-13-06-05-08.png}{Generator matrix for a cyclic code with generator polynomial $g(x)$}
+\end{theorem}
 
 
 
